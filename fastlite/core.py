@@ -79,8 +79,6 @@ def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
 
-def _edges(tbls): return "\n".join(map(_edge, tbls))
-
 def _row(col):
     xtra = " 🔑" if col.is_pk else ""
     bg = ' bgcolor="#ffebcd"' if col.is_pk else ""
@@ -88,28 +86,27 @@ def _row(col):
 
 def _tnode(tbl):
     rows = "\n".join(_row(o) for o in tbl.columns)
-    bg = ' bgcolor="lightgray"'
     res = f"""<table cellborder="1" cellspacing="0">
-    <tr><td{bg}>{tbl.name}</td></tr>
+    <tr><td bgcolor="lightgray">{tbl.name}</td></tr>
 {rows}
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-def _tnodes(tbls): return "\n\n".join(_tnode(o) for o in tbls)
-
 # %% ../nbs/00_core.ipynb 34
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
-
+    edges  = "\n".join(map(_edge,  tbls))
+    tnodes = "\n".join(map(_tnode, tbls))
+    
     res = f"""digraph G {{
 rankdir=LR;{layout}
 size="{size}";
 ratio={ratio};
 node [shape=plaintext]
 
-{_tnodes(tbls)}
+{tnodes}
 
-{_edges(tbls)}
+{edges}
 }}
 """
     return Source(res) if render else res

@@ -32,8 +32,6 @@ d = { 'settings': { 'branch': 'main',
                                'fastlite.core._ViewsGetter': ('core.html#_viewsgetter', 'fastlite/core.py'),
                                'fastlite.core._ViewsGetter.__dir__': ('core.html#_viewsgetter.__dir__', 'fastlite/core.py'),
                                'fastlite.core._edge': ('core.html#_edge', 'fastlite/core.py'),
-                               'fastlite.core._edges': ('core.html#_edges', 'fastlite/core.py'),
                                'fastlite.core._row': ('core.html#_row', 'fastlite/core.py'),
                                'fastlite.core._tnode': ('core.html#_tnode', 'fastlite/core.py'),
-                               'fastlite.core._tnodes': ('core.html#_tnodes', 'fastlite/core.py'),
                                'fastlite.core.diagram': ('core.html#diagram', 'fastlite/core.py')}}}
