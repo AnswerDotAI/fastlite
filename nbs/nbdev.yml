@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "fastlite"
+  site-url: "https://AnswerDotAI.github.io/fastlite"
+  description: "A bit of extra usability for sqlite"
+  repo-branch: main
+  repo-url: "https://github.com/AnswerDotAI/fastlite"
