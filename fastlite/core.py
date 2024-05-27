@@ -37,7 +37,7 @@ def t(self:Database): return _TablesGetter(self)
 class _Col:
     def __init__(self, t, c): self.t,self.c = t,c
     def __str__(self):  return f'"{self.t}"."{self.c}"'
-    def __repr__(self):  return f'{self.c}'
+    def __repr__(self):  return self.c
 
 class _ColsGetter:
     def __init__(self, tbl): self.tbl = tbl
