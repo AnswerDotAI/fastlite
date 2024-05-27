@@ -1,5 +1,8 @@
 project:
   type: website
+  resources: 
+    - "*.png"
+    - "*.jpg"
 
 format:
   html:
