@@ -21,7 +21,10 @@ format:
 
 website:
   site-url: "https://answerdotai.github.io/fastlite/"
-  twitter-card: true
+  twitter-card:
+    card-style: summary
+    creator: "@jeremyphoward"
+    site: "@jeremyphoward"
   open-graph: true
   repo-actions: [issue]
   navbar:
