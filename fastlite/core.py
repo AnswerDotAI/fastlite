@@ -67,14 +67,26 @@ def __str__(self:View): return f'"{self.name}"'
 def q(self:Database, sql: str, params = None)->list:
     return list(self.query(sql, params=params))
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 23
+@patch
+def __call__(
+    self:Table, with_pk:bool=False, where:str|None=None,
+    where_args: Iterable|dict|NoneType=None, order_by: str|None=None,
+    limit:int|None=None, offset:int|None=None, **kwargs)->List[dict]:
+    "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
+    
+    f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
+    return list(f(where=where, where_args=where_args, order_by=order_by,
+                  limit=limit, offset=offset, **kwargs))
+
+# %% ../nbs/00_core.ipynb 31
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 33
+# %% ../nbs/00_core.ipynb 37
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -92,7 +104,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 34
+# %% ../nbs/00_core.ipynb 38
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
