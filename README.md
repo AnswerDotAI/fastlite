@@ -18,6 +18,7 @@ to be particularly of interest to folks using Jupyter.
 from sqlite_utils import Database
 from fastlite import *
 from fastcore.utils import *
+from fastcore.net import urlsave
 ```
 
 We demonstrate `fastlite`‘s features here using the ’chinook’ sample
@@ -132,7 +133,7 @@ album_obj = album_dc(**acca_dacca[0])
 album_obj
 ```
 
-    Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+    Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
 
 You can get the definition of the dataclass using fastcore’s
 `dataclass_src` – everything is treated as nullable, in order to handle
@@ -145,23 +146,39 @@ hl_md(src, 'python')
 
 ``` python
 @dataclass
-class Album_cls:
+class Album:
     AlbumId: int | None = None
     Title: str | None = None
     ArtistId: int | None = None
 ```
 
-There’s also a shortcut to select from a table – just call it as a
-function. If you’ve previously called `dataclass()`, returned iterms
-will be constructed using that class by default. There’s lots of params
-you can check out, such as `limit`:
+Because `dataclass()` is dynamic, you won’t get auto-complete in editors
+like vscode – it’ll only work in dynamic environments like Jupyter and
+IPython. For editor support, you can export the full set of dataclasses
+to a module, which you can then import from:
+
+``` python
+create_mod(db, 'db_dc')
+```
+
+``` python
+from db_dc import Track
+Track(**dt.Track.get(1))
+```
+
+    Track(TrackId=1, Name='For Those About To Rock (We Salute You)', AlbumId=1, MediaTypeId=1, GenreId=1, Composer='Angus Young, Malcolm Young, Brian Johnson', Milliseconds=343719, Bytes=11170334, UnitPrice=0.99)
+
+There’s a shortcut to select from a table – just call it as a function.
+If you’ve previously called `dataclass()`, returned iterms will be
+constructed using that class by default. There’s lots of params you can
+check out, such as `limit`:
 
 ``` python
 album(limit=2)
 ```
 
-    [Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
-     Album_cls(AlbumId=2, Title='Balls to the Wall', ArtistId=2)]
+    [Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
+     Album(AlbumId=2, Title='Balls to the Wall', ArtistId=2)]
 
 Pass a truthy value as the first param and you’ll get tuples of primary
 keys and records:
@@ -171,8 +188,8 @@ album(1, limit=2)
 ```
 
     [(1,
-      Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)),
-     (2, Album_cls(AlbumId=2, Title='Balls to the Wall', ArtistId=2))]
+      Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)),
+     (2, Album(AlbumId=2, Title='Balls to the Wall', ArtistId=2))]
 
 `get` also uses the dataclass by default:
 
@@ -180,7 +197,18 @@ album(1, limit=2)
 album.get(1)
 ```
 
-    Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+    Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+
+If you want the dataclass-conversion behaviour for *all* tables (and
+optionally views) then you can create them all at once with
+[`all_dcs`](https://AnswerDotAI.github.io/fastlite/core.html#all_dcs).
+
+``` python
+dcs = all_dcs(db)
+dcs[0]
+```
+
+    types.Album
 
 ## KW args
 
@@ -237,6 +265,18 @@ cats()
 
     [{'id': 1, 'name': 'moo', 'weight': 6.0}]
 
+This all also works with dataclasses:
+
+``` python
+catdc = cats.dataclass()
+cat = cats.get(1)
+cat.name = 'foo'
+cats.upsert(cat)
+cats()
+```
+
+    [Cats(id=1, name='foo', weight=6.0)]
+
 ``` python
 cats.drop()
 cats
@@ -252,7 +292,7 @@ If you have graphviz installed, you can create database diagrams:
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-22-output-1.svg)
+![](index_files/figure-commonmark/cell-26-output-1.svg)
 
 Pass a subset of columns to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -261,4 +301,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-23-output-1.svg)
+![](index_files/figure-commonmark/cell-27-output-1.svg)

@@ -97,7 +97,7 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
         print('from typing import Any,Union,Optional\n', file=f)
         for o in all_dcs(db, with_views, store=store, suf=suf): print(dataclass_src(o), file=f)
 
-# %% ../nbs/00_core.ipynb 32
+# %% ../nbs/00_core.ipynb 31
 @patch
 def __call__(
     self:(Table|View), with_pk:bool=False, where:str|None=None,
@@ -112,21 +112,21 @@ def __call__(
         else: res = (self.cls(**o) for o in res)
     return list(res)
 
-# %% ../nbs/00_core.ipynb 37
+# %% ../nbs/00_core.ipynb 36
 @patch
 def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     res = self._orig_get(pk_values=pk_values)
     if as_cls and hasattr(self,'cls'): res = self.cls(**res)
     return res
 
-# %% ../nbs/00_core.ipynb 43
+# %% ../nbs/00_core.ipynb 42
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 49
+# %% ../nbs/00_core.ipynb 48
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -144,7 +144,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 50
+# %% ../nbs/00_core.ipynb 49
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
