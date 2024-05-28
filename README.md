@@ -294,7 +294,7 @@ diagram(db.tables)
 
 ![](index_files/figure-commonmark/cell-26-output-1.svg)
 
-Pass a subset of columns to just diagram those. You can also adjust the
+Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
 
 ``` python
