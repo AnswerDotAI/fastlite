@@ -26,10 +26,15 @@ website:
     creator: "@jeremyphoward"
     site: "@jeremyphoward"
   open-graph: true
-  repo-actions: [issue]
+  repo-url: https://github.com/AnswerDotAI/fastlite
+  repo-actions: [edit, issue, source]
   navbar:
     background: primary
     search: true
+    right:
+      - icon: github
+        href: https://github.com/AnswerDotAI/fastlite
+        aria-label: GitHub
   sidebar:
     style: floating
 
