@@ -27,6 +27,7 @@ website:
     site: "@jeremyphoward"
   open-graph: true
   repo-url: https://github.com/AnswerDotAI/fastlite
+  repo-subdir: nbs
   repo-actions: [edit, issue, source]
   navbar:
     background: primary
