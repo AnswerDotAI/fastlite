@@ -18,6 +18,7 @@ to be particularly of interest to folks using Jupyter.
 from sqlite_utils import Database
 from fastlite import *
 from fastcore.utils import *
+from fastcore.net import urlsave
 ```
 
 We demonstrate `fastlite`‘s features here using the ’chinook’ sample
