@@ -35,3 +35,9 @@ div.description {
   font-size: 135%;
   opacity: 70%;
 }
+
+.retina {
+   transform: scale(0.5);
+   transform-origin: top left;
+ }
+

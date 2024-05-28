@@ -23,6 +23,7 @@ class _Getter:
     def __init__(self, db): self.db = db
     # NB: Define `__dir__` in subclass to get list of objects
     def __repr__(self): return ", ".join(dir(self))
+    def __contains__(self, s): return (s if isinstance(s,str) else s.name) in dir(self)
     def __getitem__(self, idxs):
         if isinstance(idxs,str): idxs = [idxs]
         return [self.db.table(o) for o in idxs]
@@ -36,7 +37,7 @@ class _TablesGetter(_Getter):
 @patch(as_prop=True)
 def t(self:Database): return _TablesGetter(self)
 
-# %% ../nbs/00_core.ipynb 11
+# %% ../nbs/00_core.ipynb 13
 class _Col:
     def __init__(self, t, c): self.t,self.c = t,c
     def __str__(self):  return f'"{self.t}"."{self.c}"'
@@ -46,6 +47,7 @@ class _ColsGetter:
     def __init__(self, tbl): self.tbl = tbl
     def __dir__(self): return map(repr, self())
     def __call__(self): return [_Col(self.tbl.name,o.name) for o in self.tbl.columns]
+    def __contains__(self, s): return (s if isinstance(s,str) else s.c) in self.tbl.columns_dict
     def __repr__(self): return ", ".join(dir(self))
 
     def __getattr__(self, k):
@@ -58,19 +60,19 @@ def c(self:Table): return _ColsGetter(self)
 @patch(as_prop=True)
 def c(self:View): return _ColsGetter(self)
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 18
 @patch
 def __str__(self:Table): return f'"{self.name}"'
 
 @patch
 def __str__(self:View): return f'"{self.name}"'
 
-# %% ../nbs/00_core.ipynb 20
+# %% ../nbs/00_core.ipynb 23
 @patch
 def q(self:Database, sql: str, params = None)->list:
     return list(self.query(sql, params=params))
 
-# %% ../nbs/00_core.ipynb 23
+# %% ../nbs/00_core.ipynb 26
 def _get_flds(tbl): 
     return [(k, v|None, field(default=tbl.default_values.get(k,None)))
             for k,v in tbl.columns_dict.items()]
@@ -82,12 +84,12 @@ def dataclass(self:Table, store=True, suf='')->type:
     if store: self.cls = res
     return res
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 30
 def all_dcs(db, with_views=False, store=True, suf=''):
     "dataclasses for all objects in `db`"
     return [o.dataclass(store=store, suf=suf) for o in db.tables + (db.views if with_views else [])]
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 31
 def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
     "Create module for dataclasses for `db`"
     mod_fn = str(mod_fn)
@@ -97,7 +99,7 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
         print('from typing import Any,Union,Optional\n', file=f)
         for o in all_dcs(db, with_views, store=store, suf=suf): print(dataclass_src(o), file=f)
 
-# %% ../nbs/00_core.ipynb 31
+# %% ../nbs/00_core.ipynb 34
 @patch
 def __call__(
     self:(Table|View), with_pk:bool=False, where:str|None=None,
@@ -112,21 +114,21 @@ def __call__(
         else: res = (self.cls(**o) for o in res)
     return list(res)
 
-# %% ../nbs/00_core.ipynb 36
+# %% ../nbs/00_core.ipynb 39
 @patch
 def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     res = self._orig_get(pk_values=pk_values)
     if as_cls and hasattr(self,'cls'): res = self.cls(**res)
     return res
 
-# %% ../nbs/00_core.ipynb 42
+# %% ../nbs/00_core.ipynb 45
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 48
+# %% ../nbs/00_core.ipynb 51
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -144,7 +146,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 49
+# %% ../nbs/00_core.ipynb 52
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
