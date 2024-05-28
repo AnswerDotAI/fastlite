@@ -1,3 +1,4 @@
+from dataclasses import is_dataclass, MISSING, asdict
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
 import sqlite_utils
@@ -78,11 +79,12 @@ def transform_sql(
 def update(
     self:Table,
     pk_values: Union[list, tuple, str, int, float],
-    updates: Optional[dict] = None,
+    updates: Any = None,
     alter: bool = False,
     conversions: Optional[dict] = None,
     **kwargs) -> Table:
     if not updates: updates={}
+    if is_dataclass(updates): updates = asdict(updates)
     updates = {**updates, **kwargs}
     return self._orig_update(pk_values=pk_values, updates=updates, alter=alter, conversions=conversions)
 
@@ -107,6 +109,7 @@ def insert(
     strict: Optional[Union[bool, Default]] = DEFAULT,
     **kwargs) -> Table:
     if not record: record={}
+    if is_dataclass(record): record = asdict(record)
     record = {**record, **kwargs}
     return self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -135,6 +138,7 @@ def upsert(
         assert len(self.pks)==1
         pk = self.pks[0]
     if not record: record={}
+    if is_dataclass(record): record = asdict(record)
     record = {**record, **kwargs}
     return self._orig_upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,

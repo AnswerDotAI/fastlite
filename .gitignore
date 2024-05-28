@@ -1,4 +1,8 @@
 _proc/
+db_dc.py
+index_files/
+*.sqlite
+*.db
 sidebar.yml
 Gemfile.lock
 token

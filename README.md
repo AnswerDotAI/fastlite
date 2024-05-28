@@ -109,7 +109,8 @@ from {album} join {artist} using (ArtistId)
 where {ac.Name} like 'AC/%'"""
 
 db.create_view("AccaDaccaAlbums", acca_sql, replace=True)
-db.q(f"select * from {db.v.AccaDaccaAlbums}")
+acca_dacca = db.q(f"select * from {db.v.AccaDaccaAlbums}")
+acca_dacca
 ```
 
     [{'AlbumId': 1,
@@ -117,13 +118,141 @@ db.q(f"select * from {db.v.AccaDaccaAlbums}")
       'ArtistId': 1},
      {'AlbumId': 4, 'Title': 'Let There Be Rock', 'ArtistId': 1}]
 
+A `dataclass` type with the names, types, and defaults of the tables is
+created using `dataclass()`:
+
+``` python
+album_dc = album.dataclass()
+```
+
+Let’s try it:
+
+``` python
+album_obj = album_dc(**acca_dacca[0])
+album_obj
+```
+
+    Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+
+You can get the definition of the dataclass using fastcore’s
+`dataclass_src` – everything is treated as nullable, in order to handle
+auto-generated database values:
+
+``` python
+src = dataclass_src(album_dc)
+hl_md(src, 'python')
+```
+
+``` python
+@dataclass
+class Album_cls:
+    AlbumId: int | None = None
+    Title: str | None = None
+    ArtistId: int | None = None
+```
+
+There’s also a shortcut to select from a table – just call it as a
+function. If you’ve previously called `dataclass()`, returned iterms
+will be constructed using that class by default. There’s lots of params
+you can check out, such as `limit`:
+
+``` python
+album(limit=2)
+```
+
+    [Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
+     Album_cls(AlbumId=2, Title='Balls to the Wall', ArtistId=2)]
+
+Pass a truthy value as the first param and you’ll get tuples of primary
+keys and records:
+
+``` python
+album(1, limit=2)
+```
+
+    [(1,
+      Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)),
+     (2, Album_cls(AlbumId=2, Title='Balls to the Wall', ArtistId=2))]
+
+`get` also uses the dataclass by default:
+
+``` python
+album.get(1)
+```
+
+    Album_cls(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+
+## KW args
+
+If you import from `fastlite.kw` then the following methods accept
+`**kwargs`, passing them along to the first `dict` param:
+
+- `create`
+- `transform`
+- `transform_sql`
+- `update`
+- `insert`
+- `upsert`
+- `lookup`
+
+``` python
+from fastlite.kw import *
+```
+
+Without the above import, `create` would require a `dict` param, but
+here we just pass keyword args directly:
+
+``` python
+cats = dt.cats
+cats.create(id=int, name=str, weight=float, pk='id')
+hl_md(cats.schema, 'sql')
+```
+
+``` sql
+CREATE TABLE [cats] (
+   [id] INTEGER PRIMARY KEY,
+   [name] TEXT,
+   [weight] FLOAT
+)
+```
+
+…the same applies to `insert` here:
+
+``` python
+cats.insert(name='meow', weight=6)
+(idx,cat),*_ = cats(1)
+idx,cat
+```
+
+    (1, {'id': 1, 'name': 'meow', 'weight': 6.0})
+
+Using `**` in upsert here doesn’t actually achieve anything, since we
+can just pass a `dict` directly – it’s just to show that it works:
+
+``` python
+cat['name'] = "moo"
+cats.upsert(**cat)
+cats()
+```
+
+    [{'id': 1, 'name': 'moo', 'weight': 6.0}]
+
+``` python
+cats.drop()
+cats
+```
+
+    <Table cats (does not exist yet)>
+
+## Diagrams
+
 If you have graphviz installed, you can create database diagrams:
 
 ``` python
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-11-output-1.svg)
+![](index_files/figure-commonmark/cell-22-output-1.svg)
 
 Pass a subset of columns to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -132,4 +261,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-12-output-1.svg)
+![](index_files/figure-commonmark/cell-23-output-1.svg)
