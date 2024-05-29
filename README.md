@@ -68,6 +68,14 @@ interactive Python environment:
 <img src="index_files/figure-commonmark/cell-15-1-image.png"
 width="180" />
 
+You can check if a table is in the database already:
+
+``` python
+'Artist' in dt
+```
+
+    True
+
 Column work in a similar way to tables, using the `c` property:
 
 ``` python
@@ -79,7 +87,7 @@ ac
 
 Auto-complete works for columns too:
 
-<img src="index_files/figure-commonmark/cell-18-1-image.png"
+<img src="index_files/figure-commonmark/cell-20-1-image.png"
 width="140" />
 
 Columns, tables, and view stringify in a format suitable for including
@@ -210,10 +218,10 @@ dcs[0]
 
     types.Album
 
-## KW args
+## Insert, upsert, and update
 
-If you import from `fastlite.kw` then the following methods accept
-`**kwargs`, passing them along to the first `dict` param:
+The following methods accept `**kwargs`, passing them along to the first
+`dict` param:
 
 - `create`
 - `transform`
@@ -222,13 +230,6 @@ If you import from `fastlite.kw` then the following methods accept
 - `insert`
 - `upsert`
 - `lookup`
-
-``` python
-from fastlite.kw import *
-```
-
-Without the above import, `create` would require a `dict` param, but
-here we just pass keyword args directly:
 
 ``` python
 cats = dt.cats
@@ -247,12 +248,16 @@ CREATE TABLE [cats] (
 …the same applies to `insert` here:
 
 ``` python
-cats.insert(name='meow', weight=6)
-(idx,cat),*_ = cats(1)
-idx,cat
+cat = cats.insert(name='meow', weight=6)
 ```
 
-    (1, {'id': 1, 'name': 'meow', 'weight': 6.0})
+The inserted row is returned.
+
+``` python
+cat
+```
+
+    {'id': 1, 'name': 'meow', 'weight': 6.0}
 
 Using `**` in upsert here doesn’t actually achieve anything, since we
 can just pass a `dict` directly – it’s just to show that it works:
@@ -292,7 +297,7 @@ If you have graphviz installed, you can create database diagrams:
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-26-output-1.svg)
+![](index_files/figure-commonmark/cell-27-output-1.svg)
 
 Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -301,4 +306,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-27-output-1.svg)
+![](index_files/figure-commonmark/cell-28-output-1.svg)
