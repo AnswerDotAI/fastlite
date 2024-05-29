@@ -127,6 +127,8 @@ acca_dacca
       'ArtistId': 1},
      {'AlbumId': 4, 'Title': 'Let There Be Rock', 'ArtistId': 1}]
 
+## Dataclass support
+
 A `dataclass` type with the names, types, and defaults of the tables is
 created using `dataclass()`:
 
