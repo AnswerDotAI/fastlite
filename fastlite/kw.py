@@ -86,7 +86,7 @@ def update(
     if not updates: updates={}
     if is_dataclass(updates): updates = asdict(updates)
     updates = {**updates, **kwargs}
-    return self._orig_update(pk_values=pk_values, updates=updates, alter=alter, conversions=conversions)
+    self._orig_update(pk_values=pk_values, updates=updates, alter=alter, conversions=conversions)
 
 
 @patch
@@ -111,10 +111,11 @@ def insert(
     if not record: record={}
     if is_dataclass(record): record = asdict(record)
     record = {**record, **kwargs}
-    return self._orig_insert(
+    self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
         replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict)
+    return self.get(self.last_pk)
 
 
 @patch
@@ -140,10 +141,11 @@ def upsert(
     if not record: record={}
     if is_dataclass(record): record = asdict(record)
     record = {**record, **kwargs}
-    return self._orig_upsert(
+    self._orig_upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
+    return self.get(self.last_pk)
 
 
 @patch
