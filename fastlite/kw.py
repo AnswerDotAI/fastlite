@@ -34,20 +34,12 @@ def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
 @patch
 def create(
     self:Table,
-    columns: Dict[str, Any]=None,
-    pk: Any|None = None,
-    foreign_keys: Union[Iterable[Union[str, sqlite_utils.db.ForeignKey, Tuple[str, str], Tuple[str, str, str], Tuple[str, str, str, str]]], List[Union[str, sqlite_utils.db.ForeignKey, Tuple[str, str], Tuple[str, str, str], Tuple[str, str, str, str]]], NoneType] = None,
-    column_order: List[str]|None = None,
-    not_null: Iterable[str]|None = None,
-    defaults: Dict[str, Any]|None = None,
-    hash_id: str|None = None,
-    hash_id_columns: Iterable[str]|None = None,
-    extracts: Union[Dict[str, str], List[str], NoneType] = None,
-    if_not_exists: bool = False,
-    replace: bool = False,
-    ignore: bool = False,
-    transform: bool = False,
-    strict: bool = False,
+    columns: Dict[str, Any]=None, pk: Any=None, foreign_keys=None,
+    column_order: List[str]|None=None, not_null: Iterable[str]|None=None, defaults: Dict[str, Any]|None=None,
+    hash_id: str|None=None, hash_id_columns: Iterable[str]|None=None,
+    extracts: Union[Dict[str, str], List[str], NoneType]=None,
+    if_not_exists: bool = False, replace: bool = False, ignore: bool = False,
+    transform: bool = False, strict: bool = False,
     **kwargs):
     if not columns: columns={}
     columns = {**columns, **kwargs}
@@ -59,17 +51,11 @@ def create(
 @patch
 def transform(
     self:Table, *,
-    types: dict|None = None,
-    rename: dict|None = None,
-    drop: Iterable|None = None,
-    pk: Any|None = DEFAULT,
-    not_null: Iterable[str]|None = None,
-    defaults: Dict[str, Any]|None = None,
-    drop_foreign_keys: Iterable[str]|None = None,
-    add_foreign_keys: ForeignKeysType|None = None,
-    foreign_keys: ForeignKeysType|None = None,
-    column_order: List[str]|None = None,
-    keep_table: str|None = None,
+    types: dict|None=None, rename: dict|None=None, drop: Iterable|None=None, pk: Any|None=DEFAULT,
+    not_null: Iterable[str]|None=None, defaults: Dict[str, Any]|None=None,
+    drop_foreign_keys: Iterable[str]|None=None, add_foreign_keys: ForeignKeysType|None=None,
+    foreign_keys: ForeignKeysType|None=None,
+    column_order: List[str]|None=None, keep_table: str|None=None,
     **kwargs) -> Table:
     if not types: types={}
     types = {**types, **kwargs}
@@ -81,17 +67,11 @@ def transform(
 @patch
 def transform_sql(
     self:Table, *,
-    types: dict|None = None,
-    rename: dict|None = None,
-    drop: Iterable|None = None,
-    pk: Any|None = DEFAULT,
-    not_null: Iterable[str]|None = None,
-    defaults: Dict[str, Any]|None = None,
-    drop_foreign_keys: Iterable[str]|None = None,
-    add_foreign_keys: ForeignKeysType|None = None,
-    foreign_keys: ForeignKeysType|None = None,
-    column_order: List[str]|None = None,
-    keep_table: str|None = None,
+    types: dict|None=None, rename: dict|None=None, drop: Iterable|None=None, pk: Any|None=DEFAULT,
+    not_null: Iterable[str]|None=None, defaults: Dict[str, Any]|None=None,
+    drop_foreign_keys: Iterable[str]|None=None, add_foreign_keys: ForeignKeysType|None=None,
+    foreign_keys: ForeignKeysType|None=None,
+    column_order: List[str]|None=None, keep_table: str|None=None,
     **kwargs) -> List[str]:
     if not types: types={}
     types = {**types, **kwargs}
@@ -117,20 +97,17 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
 def insert_all(
     self:Table,
     records: Dict[str, Any]=None, pk=DEFAULT, foreign_keys=DEFAULT,
-    column_order: Union[List[str], Default, None] = DEFAULT,
-    not_null: Union[Iterable[str], Default, None] = DEFAULT,
-    defaults: Union[Dict[str, Any], Default, None] = DEFAULT,
+    column_order: Union[List[str], Default, None]=DEFAULT,
+    not_null: Union[Iterable[str], Default, None]=DEFAULT,
+    defaults: Union[Dict[str, Any], Default, None]=DEFAULT,
     batch_size=DEFAULT,
-    hash_id: Union[str, Default, None] = DEFAULT,
-    hash_id_columns: Union[Iterable[str], Default, None] = DEFAULT,
-    alter: opt_bool = DEFAULT,
-    ignore: opt_bool = DEFAULT,
-    replace: opt_bool = DEFAULT,
-    truncate=False,
-    extracts: Union[Dict[str, str], List[str], Default, None] = DEFAULT,
-    conversions: Union[Dict[str, str], Default, None] = DEFAULT,
-    columns: Union[Dict[str, Any], Default, None] = DEFAULT,
-    strict: opt_bool = DEFAULT,
+    hash_id: Union[str, Default, None]=DEFAULT,
+    hash_id_columns: Union[Iterable[str], Default, None]=DEFAULT,
+    alter: opt_bool=DEFAULT, ignore: opt_bool=DEFAULT, replace: opt_bool=DEFAULT, truncate=False,
+    extracts: Union[Dict[str, str], List[str], Default, None]=DEFAULT,
+    conversions: Union[Dict[str, str], Default, None]=DEFAULT,
+    columns: Union[Dict[str, Any], Default, None]=DEFAULT,
+    strict: opt_bool=DEFAULT,
     upsert:bool=False, analyze:bool=False,
     **kwargs) -> Table:
     xtra = getattr(self,'xtra_id',{})
@@ -146,21 +123,19 @@ def insert_all(
 @patch
 def insert(
     self:Table,
-    record: Dict[str, Any]=None,
-    pk=DEFAULT,
-    foreign_keys=DEFAULT,
-    column_order: Union[List[str], Default, None] = DEFAULT,
-    not_null: Union[Iterable[str], Default, None] = DEFAULT,
-    defaults: Union[Dict[str, Any], Default, None] = DEFAULT,
-    hash_id: Union[str, Default, None] = DEFAULT,
-    hash_id_columns: Union[Iterable[str], Default, None] = DEFAULT,
-    alter: opt_bool = DEFAULT,
-    ignore: opt_bool = DEFAULT,
-    replace: opt_bool = DEFAULT,
-    extracts: Union[Dict[str, str], List[str], Default, None] = DEFAULT,
-    conversions: Union[Dict[str, str], Default, None] = DEFAULT,
-    columns: Union[Dict[str, Any], Default, None] = DEFAULT,
-    strict: opt_bool = DEFAULT,
+    record: Dict[str, Any]=None, pk=DEFAULT, foreign_keys=DEFAULT,
+    column_order: Union[List[str], Default, None]=DEFAULT,
+    not_null: Union[Iterable[str], Default, None]=DEFAULT,
+    defaults: Union[Dict[str, Any], Default, None]=DEFAULT,
+    hash_id: Union[str, Default, None]=DEFAULT,
+    hash_id_columns: Union[Iterable[str], Default, None]=DEFAULT,
+    alter: opt_bool=DEFAULT,
+    ignore: opt_bool=DEFAULT,
+    replace: opt_bool=DEFAULT,
+    extracts: Union[Dict[str, str], List[str], Default, None]=DEFAULT,
+    conversions: Union[Dict[str, str], Default, None]=DEFAULT,
+    columns: Union[Dict[str, Any], Default, None]=DEFAULT,
+    strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
     if not record: record={}
     if is_dataclass(record): record = asdict(record)
@@ -175,19 +150,17 @@ def insert(
 @patch
 def upsert(
     self:Table,
-    record:Any=None,
-    pk=DEFAULT,
-    foreign_keys=DEFAULT,
-    column_order: Union[List[str], Default, None] = DEFAULT,
-    not_null: Union[Iterable[str], Default, None] = DEFAULT,
-    defaults: Union[Dict[str, Any], Default, None] = DEFAULT,
-    hash_id: Union[str, Default]|None = DEFAULT,
-    hash_id_columns: Union[Iterable[str], Default, None] = DEFAULT,
-    alter: Union[bool, Default]|None = DEFAULT,
-    extracts: Union[Dict[str, str], List[str], Default, None] = DEFAULT,
-    conversions: Union[Dict[str, str], Default, None] = DEFAULT,
-    columns: Union[Dict[str, Any], Default, None] = DEFAULT,
-    strict: Union[bool, Default]|None = DEFAULT,
+    record:Any=None, pk=DEFAULT, foreign_keys=DEFAULT,
+    column_order: Union[List[str], Default, None]=DEFAULT,
+    not_null: Union[Iterable[str], Default, None]=DEFAULT,
+    defaults: Union[Dict[str, Any], Default, None]=DEFAULT,
+    hash_id: Union[str, Default]|None=DEFAULT,
+    hash_id_columns: Union[Iterable[str], Default, None]=DEFAULT,
+    alter: Union[bool, Default]|None=DEFAULT,
+    extracts: Union[Dict[str, str], List[str], Default, None]=DEFAULT,
+    conversions: Union[Dict[str, str], Default, None]=DEFAULT,
+    columns: Union[Dict[str, Any], Default, None]=DEFAULT,
+    strict: Union[bool, Default]|None=DEFAULT,
     **kwargs) -> Table:
     if pk==DEFAULT:
         assert len(self.pks)==1
@@ -206,15 +179,15 @@ def upsert(
 def lookup(
     self:Table,
     lookup_values: Dict[str, Any],
-    extra_values: Dict[str, Any]|None = None,
+    extra_values: Dict[str, Any]|None=None,
     pk: str|None = "id",
-    foreign_keys: ForeignKeysType|None = None,
-    column_order: List[str]|None = None,
-    not_null: Iterable[str]|None = None,
-    defaults: Dict[str, Any]|None = None,
-    extracts: Union[Dict[str, str], List[str], None] = None,
-    conversions: Dict[str, str]|None = None,
-    columns: Dict[str, Any]|None = None,
+    foreign_keys: ForeignKeysType|None=None,
+    column_order: List[str]|None=None,
+    not_null: Iterable[str]|None=None,
+    defaults: Dict[str, Any]|None=None,
+    extracts: Union[Dict[str, str], List[str], None]=None,
+    conversions: Dict[str, str]|None=None,
+    columns: Dict[str, Any]|None=None,
     strict: bool|None = False,
     **kwargs):
     if not lookup_values: lookup_values={}
