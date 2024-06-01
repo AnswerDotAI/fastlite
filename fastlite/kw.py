@@ -75,18 +75,16 @@ def transform_sql(
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
 
+
 @patch
-def update(
-    self:Table,
-    pk_values: Union[list, tuple, str, int, float],
-    updates: Any = None,
-    alter: bool = False,
-    conversions: Optional[dict] = None,
-    **kwargs) -> Table:
+def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
+           alter: bool=False, conversions: dict|None=None, **kwargs):
     if not updates: updates={}
     if is_dataclass(updates): updates = asdict(updates)
     updates = {**updates, **kwargs}
-    self._orig_update(pk_values=pk_values, updates=updates, alter=alter, conversions=conversions)
+    if not pk_values: pk_values = [updates[o] for o in self.pks]
+    self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
+    return self.get(self.last_pk)
 
 
 @patch
@@ -121,7 +119,7 @@ def insert(
 @patch
 def upsert(
     self:Table,
-    record: Dict[str, Any]=None,
+    record:Any=None,
     pk=DEFAULT,
     foreign_keys=DEFAULT,
     column_order: Optional[Union[List[str], Default]] = DEFAULT,

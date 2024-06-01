@@ -25,7 +25,7 @@ class _Getter:
     def __repr__(self): return ", ".join(dir(self))
     def __contains__(self, s): return (s if isinstance(s,str) else s.name) in dir(self)
     def __getitem__(self, idxs):
-        if isinstance(idxs,str): idxs = [idxs]
+        if isinstance(idxs,str): return self.db.table(idxs)
         return [self.db.table(o) for o in idxs]
     def __getattr__(self, k):
         if k[0]=='_': raise AttributeError
