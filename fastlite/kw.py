@@ -5,6 +5,8 @@ import sqlite_utils
 from sqlite_utils import Database
 from sqlite_utils.db import Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
 
+opt_bool = Union[bool, Default, None]
+
 @patch
 def xtra(self:Table, **kwargs):
     "Set `xtra_id`"
@@ -121,14 +123,14 @@ def insert_all(
     batch_size=DEFAULT,
     hash_id: Union[str, Default, None] = DEFAULT,
     hash_id_columns: Union[Iterable[str], Default, None] = DEFAULT,
-    alter: Union[bool, Default, None] = DEFAULT,
-    ignore: Union[bool, Default, None] = DEFAULT,
-    replace: Union[bool, Default, None] = DEFAULT,
+    alter: opt_bool = DEFAULT,
+    ignore: opt_bool = DEFAULT,
+    replace: opt_bool = DEFAULT,
     truncate=False,
     extracts: Union[Dict[str, str], List[str], Default, None] = DEFAULT,
     conversions: Union[Dict[str, str], Default, None] = DEFAULT,
     columns: Union[Dict[str, Any], Default, None] = DEFAULT,
-    strict: Union[bool, Default, None] = DEFAULT,
+    strict: opt_bool = DEFAULT,
     upsert:bool=False, analyze:bool=False,
     **kwargs) -> Table:
     xtra = getattr(self,'xtra_id',{})
@@ -152,13 +154,13 @@ def insert(
     defaults: Union[Dict[str, Any], Default, None] = DEFAULT,
     hash_id: Union[str, Default, None] = DEFAULT,
     hash_id_columns: Union[Iterable[str], Default, None] = DEFAULT,
-    alter: Union[bool, Default, None] = DEFAULT,
-    ignore: Union[bool, Default, None] = DEFAULT,
-    replace: Union[bool, Default, None] = DEFAULT,
+    alter: opt_bool = DEFAULT,
+    ignore: opt_bool = DEFAULT,
+    replace: opt_bool = DEFAULT,
     extracts: Union[Dict[str, str], List[str], Default, None] = DEFAULT,
     conversions: Union[Dict[str, str], Default, None] = DEFAULT,
     columns: Union[Dict[str, Any], Default, None] = DEFAULT,
-    strict: Union[bool, Default, None] = DEFAULT,
+    strict: opt_bool = DEFAULT,
     **kwargs) -> Table:
     if not record: record={}
     if is_dataclass(record): record = asdict(record)
