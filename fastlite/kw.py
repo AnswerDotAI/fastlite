@@ -13,6 +13,15 @@ def xtra(self:Table, **kwargs):
     self.xtra_id = kwargs
 
 @patch
+def get_last(self:Table, as_cls:bool=True):
+    row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
+    vals = [row[pk] for pk in self.pks]
+    self.last_pk = vals[0] if len(vals)==1 else vals
+    if as_cls and hasattr(self,'cls'): row = self.cls(**row)
+    return row
+
+
+@patch
 def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     if not isinstance(pk_values, (list, tuple)): pk_values = [pk_values]
     last_pk = pk_values[0] if len(self.pks) == 1 else pk_values
@@ -90,7 +99,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     updates = {**updates, **kwargs, **xtra}
     if not pk_values: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
-    return self.get(self.last_pk)
+    return self.get_last()
 
 
 @patch
@@ -144,7 +153,7 @@ def insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
         replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get(self.last_pk)
+    return self.get_last()
 
 
 @patch
@@ -172,7 +181,7 @@ def upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get(self.last_pk)
+    return self.get_last()
 
 
 @patch
