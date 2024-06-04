@@ -69,6 +69,10 @@ def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
     return row
 
+@patch
+def __getitem__(self:Table, pk_values):
+    return self.get(pk_values)
+
 
 @patch
 def create(
