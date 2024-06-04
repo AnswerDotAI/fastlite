@@ -12,6 +12,7 @@ def xtra(self:Table, **kwargs):
 
 @patch
 def get_last(self:Table, as_cls:bool=True):
+    assert self.last_rowid
     row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
     assert row, f"Couldn't find {self.last_rowid}"
     vals = [row[pk] for pk in self.pks]
@@ -200,11 +201,12 @@ def upsert(
     if not record: record={}
     if is_dataclass(record): record = asdict(record)
     record = {**record, **kwargs}
+    last_pk = record[pk]
     self._orig_upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get_last()
+    return self.get(last_pk)
 
 
 @patch

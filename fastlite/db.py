@@ -2890,7 +2890,7 @@ class Table(Queryable):
 
                     else:
                         raise
-            if num_records_processed == 1:
+            if num_records_processed == 1 and result.lastrowid:
                 self.last_rowid = result.lastrowid
                 self.last_pk = self.last_rowid
                 # self.last_rowid will be 0 if a "INSERT OR IGNORE" happened
