@@ -2,6 +2,15 @@
 
 <!-- do not remove -->
 
+## 0.0.3
+
+### New Features
+
+- Vendor in sqlite-utils and remove dependency ([#7](https://github.com/AnswerDotAI/fastlite/issues/7))
+- Add `ids_and_rows_where` and use it to work around sqlite-utils rowid bug ([#6](https://github.com/AnswerDotAI/fastlite/issues/6))
+- Add `get_last` and use it to set `last_pk` correctly and return updated row ([#5](https://github.com/AnswerDotAI/fastlite/issues/5))
+
+
 ## 0.0.2
 
 ### New Features

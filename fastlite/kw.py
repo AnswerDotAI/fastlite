@@ -5,6 +5,13 @@ from .db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoun
 
 opt_bool = Union[bool, Default, None]
 
+def database(path, wal=True):
+    path = Path(path)
+    path.parent.mkdir(exist_ok=True)
+    db = Database(path)
+    if wal: db.enable_wal()
+    return db
+
 @patch
 def xtra(self:Table, **kwargs):
     "Set `xtra_id`"
