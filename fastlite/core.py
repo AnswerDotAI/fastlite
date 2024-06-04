@@ -104,8 +104,12 @@ def __call__(
     where_args: Iterable|dict|NoneType=None, with_pk:bool=False, order_by: str|None=None,
     limit:int|None=None, offset:int|None=None, as_cls:bool=True, **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
-    
+
     f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
+    xtra = getattr(self, 'xtra_id', {})
+    if xtra:
+        xw = ' and '.join(f"[{k}] = {v!r}" for k,v in xtra.items())
+        where = f'{xw} and {where}' if where else xw
     res = f(where=where, where_args=where_args, order_by=order_by, limit=limit, offset=offset, **kwargs)
     if as_cls and hasattr(self,'cls'):
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
