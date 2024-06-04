@@ -18,7 +18,6 @@ import secrets
 import textwrap
 from typing import ( cast, Any, Callable, Dict, Generator, Iterable, Union, Optional, List, Tuple,)
 import uuid
-from sqlite_utils.plugins import pm
 
 try: from sqlite_dump import iterdump
 except ImportError: iterdump = None
@@ -233,7 +232,6 @@ class Database:
         recursive_triggers: bool = True,
         tracer: Optional[Callable] = None,
         use_counts_table: bool = False,
-        execute_plugins: bool = True,
         strict: bool = False,
     ):
         assert (filename_or_conn is not None and (not memory and not memory_name)) or (
@@ -266,8 +264,6 @@ class Database:
             self.execute("PRAGMA recursive_triggers=on;")
         self._registered_functions: set = set()
         self.use_counts_table = use_counts_table
-        if execute_plugins:
-            pm.hook.prepare_connection(conn=self.conn)
         self.strict = strict
 
     def close(self):
@@ -1146,8 +1142,8 @@ class Database:
 
         .. code-block:: python
 
-            from sqlite_utils.db import Database
-            from sqlite_utils.utils import find_spatialite
+            from fastlite.db import Database
+            from fastlite.utils import find_spatialite
 
             db = Database("mydb.db")
             db.init_spatialite(find_spatialite())
@@ -1157,8 +1153,8 @@ class Database:
 
         .. code-block:: python
 
-            from sqlite_utils.db import Database
-            from sqlite_utils.utils import find_spatialite
+            from fastlite.db import Database
+            from fastlite.utils import find_spatialite
 
             db = Database("mydb.db")
             db.init_spatialite("./local/mod_spatialite.dylib")
@@ -1424,7 +1420,7 @@ class Table(Queryable):
         """
         Return row (as dictionary) for the specified primary key.
 
-        Raises ``sqlite_utils.db.NotFoundError`` if a matching row cannot be found.
+        Raises ``fastlite.db.NotFoundError`` if a matching row cannot be found.
 
         :param pk_values: A single value, or a tuple of values for tables that have a compound primary key
         """
@@ -3469,8 +3465,8 @@ class Table(Queryable):
 
         .. code-block:: python
 
-            from sqlite_utils.db import Database
-            from sqlite_utils.utils import find_spatialite
+            from fastlite.db import Database
+            from fastlite.utils import find_spatialite
 
             db = Database("mydb.db")
             db.init_spatialite(find_spatialite())
