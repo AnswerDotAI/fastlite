@@ -10,9 +10,7 @@ from typing import Any,Union,Optional
 from fastcore.utils import *
 from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
-
-from sqlite_utils import Database
-from sqlite_utils.db import Table, View
+from .db import *
 
 try: from graphviz import Source
 except ImportError: pass
