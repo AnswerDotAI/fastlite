@@ -58,8 +58,7 @@ def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     item = first(self.ids_and_rows_where(" and ".join(wheres), vals))
     if not item: raise NotFoundError
     rid,row = item
-    self.last_pk = last_pk
-    self.last_rowid = rid
+    self.last_pk,self.last_rowid = last_pk,rid
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
     return row
 
