@@ -43,6 +43,4 @@ d = { 'settings': { 'branch': 'main',
                                'fastlite.core.all_dcs': ('core.html#all_dcs', 'fastlite/core.py'),
                                'fastlite.core.create_mod': ('core.html#create_mod', 'fastlite/core.py'),
                                'fastlite.core.diagram': ('core.html#diagram', 'fastlite/core.py')},
-            'fastlite.db': {},
-            'fastlite.kw': {},
-            'fastlite.utils': {}}}
+            'fastlite.kw': {}}}
