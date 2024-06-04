@@ -15,7 +15,6 @@ import os
 import pathlib
 import re
 import secrets
-from sqlite_fts4 import rank_bm25  # type: ignore
 import textwrap
 from typing import ( cast, Any, Callable, Dict, Generator, Iterable, Union, Optional, List, Tuple,)
 import uuid
@@ -385,10 +384,6 @@ class Database:
         else:
             register(fn)
 
-    def register_fts4_bm25(self):
-        "Register the ``rank_bm25(match_info)`` function used for calculating relevance with SQLite FTS4."
-        self.register_function(rank_bm25, deterministic=True, replace=True)
-
     def attach(self, alias: str, filepath: Union[str, pathlib.Path]):
         """
         Attach another SQLite database file to this connection with the specified alias, equivalent to::
@@ -516,16 +511,13 @@ class Database:
 
         return self.quote(value)
 
-    def table_names(self, fts4: bool = False, fts5: bool = False) -> List[str]:
+    def table_names(self, fts5: bool = False) -> List[str]:
         """
         List of string table names in this database.
 
-        :param fts4: Only return tables that are part of FTS4 indexes
         :param fts5: Only return tables that are part of FTS5 indexes
         """
         where = ["type = 'table'"]
-        if fts4:
-            where.append("sql like '%USING FTS4%'")
         if fts5:
             where.append("sql like '%USING FTS5%'")
         sql = "select name from sqlite_master where {}".format(" AND ".join(where))
@@ -2525,11 +2517,6 @@ class Table(Queryable):
         ).strip()
         if virtual_table_using == "FTS5":
             rank_implementation = "[{}].rank".format(fts_table)
-        else:
-            self.db.register_fts4_bm25()
-            rank_implementation = "rank_bm25(matchinfo([{}], 'pcnalx'))".format(
-                fts_table
-            )
         if include_rank:
             columns_with_prefix_sql += ",\n    " + rank_implementation + " rank"
         limit_offset = ""
