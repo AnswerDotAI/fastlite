@@ -100,8 +100,8 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
 # %% ../nbs/00_core.ipynb 34
 @patch
 def __call__(
-    self:(Table|View), with_pk:bool=False, where:str|None=None,
-    where_args: Iterable|dict|NoneType=None, order_by: str|None=None,
+    self:(Table|View), where:str|None=None,
+    where_args: Iterable|dict|NoneType=None, with_pk:bool=False, order_by: str|None=None,
     limit:int|None=None, offset:int|None=None, as_cls:bool=True, **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
     
