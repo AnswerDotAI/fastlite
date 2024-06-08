@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.5
+
+### New Features
+
+- Switch to sqlite-minutils ([#10](https://github.com/AnswerDotAI/fastlite/issues/10))
+
+
 ## 0.0.4
 
 ### New Features
