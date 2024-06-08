@@ -1,7 +1,7 @@
 from dataclasses import is_dataclass, MISSING, asdict
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
-from sqlite_utils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
+from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
 
 opt_bool = Union[bool, Default, None]
 

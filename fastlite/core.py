@@ -10,7 +10,7 @@ from typing import Any,Union,Optional
 from fastcore.utils import *
 from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
-from sqlite_utils.db import *
+from sqlite_minutils.db import *
 
 try: from graphviz import Source
 except ImportError: pass
@@ -40,6 +40,7 @@ class _Col:
     def __init__(self, t, c): self.t,self.c = t,c
     def __str__(self):  return f'"{self.t}"."{self.c}"'
     def __repr__(self):  return self.c
+    def __iter__(self): return iter(self.c)
 
 class _ColsGetter:
     def __init__(self, tbl): self.tbl = tbl

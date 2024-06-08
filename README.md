@@ -15,7 +15,6 @@ to be particularly of interest to folks using Jupyter.
 ## Overview
 
 ``` python
-from sqlite_utils import Database
 from fastlite import *
 from fastcore.utils import *
 from fastcore.net import urlsave
@@ -29,7 +28,7 @@ url = 'https://github.com/lerocha/chinook-database/raw/master/ChinookDatabase/Da
 path = Path('chinook.sqlite')
 if not path.exists(): urlsave(url, path)
 
-db = Database("chinook.sqlite")
+db = database("chinook.sqlite")
 ```
 
 Databases have a `t` property that lists all tables:
@@ -171,9 +170,11 @@ to a module, which you can then import from:
 create_mod(db, 'db_dc')
 ```
 
+Indexing into a table does a query on primary key:
+
 ``` python
 from db_dc import Track
-Track(**dt.Track.get(1))
+Track(**dt.Track[1])
 ```
 
     Track(TrackId=1, Name='For Those About To Rock (We Salute You)', AlbumId=1, MediaTypeId=1, GenreId=1, Composer='Angus Young, Malcolm Young, Brian Johnson', Milliseconds=343719, Bytes=11170334, UnitPrice=0.99)
@@ -190,35 +191,46 @@ album(limit=2)
     [Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
      Album(AlbumId=2, Title='Balls to the Wall', ArtistId=2)]
 
-Pass a truthy value as the first param and you’ll get tuples of primary
-keys and records:
+Pass a truthy value as `with_pk` and you’ll get tuples of primary keys
+and records:
 
 ``` python
-album(1, limit=2)
+album(with_pk=1, limit=2)
 ```
 
     [(1,
       Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)),
      (2, Album(AlbumId=2, Title='Balls to the Wall', ArtistId=2))]
 
-`get` also uses the dataclass by default:
+Indexing also uses the dataclass by default:
 
 ``` python
-album.get(1)
+album[5]
 ```
 
-    Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1)
+    Album(AlbumId=5, Title='Big Ones', ArtistId=3)
 
-If you want the dataclass-conversion behaviour for *all* tables (and
-optionally views) then you can create them all at once with
-[`all_dcs`](https://AnswerDotAI.github.io/fastlite/core.html#all_dcs).
+If you set `xtra` fields, then indexing is also filtered by those. As a
+result, for instance in this case, nothing is returned since album 5 is
+not created by artist 1:
 
 ``` python
-dcs = all_dcs(db)
-dcs[0]
+album.xtra(ArtistId=1)
+
+try: album[5]
+except NotFoundError: print("Not found")
 ```
 
-    types.Album
+    Not found
+
+The same filtering is done when using the table as a callable:
+
+``` python
+album()
+```
+
+    [Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
+     Album(AlbumId=4, Title='Let There Be Rock', ArtistId=1)]
 
 ## Insert, upsert, and update
 
@@ -233,9 +245,19 @@ The following methods accept `**kwargs`, passing them along to the first
 - `upsert`
 - `lookup`
 
+We can access a table that doesn’t actually exist yet:
+
 ``` python
 cats = dt.cats
-cats.create(id=int, name=str, weight=float, pk='id')
+cats
+```
+
+    <Table cats (does not exist yet)>
+
+We can use keyword arguments to now create that table:
+
+``` python
+cats.create(id=int, name=str, weight=float, uid=int, pk='id')
 hl_md(cats.schema, 'sql')
 ```
 
@@ -243,46 +265,70 @@ hl_md(cats.schema, 'sql')
 CREATE TABLE [cats] (
    [id] INTEGER PRIMARY KEY,
    [name] TEXT,
-   [weight] FLOAT
+   [weight] FLOAT,
+   [uid] INTEGER
 )
 ```
 
-…the same applies to `insert` here:
+It we set `xtra` then the additional fields are used for `insert`,
+`update`, and `delete`:
 
 ``` python
+cats.xtra(uid=2)
 cat = cats.insert(name='meow', weight=6)
 ```
 
-The inserted row is returned.
+The inserted row is returned, including the xtra ‘uid’ field.
 
 ``` python
 cat
 ```
 
-    {'id': 1, 'name': 'meow', 'weight': 6.0}
+    {'id': 1, 'name': 'meow', 'weight': 6.0, 'uid': 2}
 
-Using `**` in upsert here doesn’t actually achieve anything, since we
+Using `**` in `update` here doesn’t actually achieve anything, since we
 can just pass a `dict` directly – it’s just to show that it works:
 
 ``` python
 cat['name'] = "moo"
-cats.upsert(**cat)
+cat['uid'] = 1
+cats.update(**cat)
 cats()
 ```
 
-    [{'id': 1, 'name': 'moo', 'weight': 6.0}]
+    [{'id': 1, 'name': 'moo', 'weight': 6.0, 'uid': 2}]
+
+Attempts to update or insert with xtra fields are ignored.
+
+An error is raised if there’s an attempt to update a record not matching
+`xtra` fields:
+
+``` python
+cats.xtra(uid=1)
+try: cats.update(**cat)
+except NotFoundError: print("Not found")
+```
+
+    Not found
 
 This all also works with dataclasses:
 
 ``` python
-catdc = cats.dataclass()
-cat = cats.get(1)
+cats.xtra(uid=2)
+cats.dataclass()
+cat = cats[1]
+cat
+```
+
+    Cats(id=1, name='moo', weight=6.0, uid=2)
+
+``` python
 cat.name = 'foo'
 cats.upsert(cat)
 cats()
 ```
 
-    [Cats(id=1, name='foo', weight=6.0)]
+    [Cats(id=1, name='foo', weight=6.0, uid=2)]
 
 ``` python
 cats.drop()
@@ -299,7 +345,7 @@ If you have graphviz installed, you can create database diagrams:
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-27-output-1.svg)
+![](index_files/figure-commonmark/cell-31-output-1.svg)
 
 Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -308,4 +354,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-28-output-1.svg)
+![](index_files/figure-commonmark/cell-32-output-1.svg)
