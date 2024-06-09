@@ -19,7 +19,7 @@ def xtra(self:Table, **kwargs):
 
 @patch
 def get_last(self:Table, as_cls:bool=True):
-    assert self.last_rowid
+    assert self.last_rowid is not None
     row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
     assert row, f"Couldn't find {self.last_rowid}"
     vals = [row[pk] for pk in self.pks]
@@ -70,8 +70,7 @@ def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
     return row
 
 @patch
-def __getitem__(self:Table, pk_values):
-    return self.get(pk_values)
+def __getitem__(self:Table, pk_values): return self.get(pk_values)
 
 
 @patch
@@ -131,7 +130,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     if is_dataclass(updates): updates = asdict(updates)
     xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
-    if not pk_values: pk_values = [updates[o] for o in self.pks]
+    if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
     return self.get_last()
 
