@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.7
+
+### New Features
+
+- `Database.create` for creating a table from a class ([#12](https://github.com/AnswerDotAI/fastlite/issues/12))
+
+
 ## 0.0.6
 
 
