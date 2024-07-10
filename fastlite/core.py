@@ -4,13 +4,15 @@
 __all__ = ['all_dcs', 'create_mod', 'diagram']
 
 # %% ../nbs/00_core.ipynb 3
-from dataclasses import field, make_dataclass, fields, Field, is_dataclass, MISSING
+from dataclasses import dataclass, field, make_dataclass, fields, Field, is_dataclass, MISSING
 from typing import Any,Union,Optional
+from inspect import get_annotations
 
 from fastcore.utils import *
 from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
 from sqlite_minutils.db import *
+import types
 
 try: from graphviz import Source
 except ImportError: pass
@@ -76,12 +78,13 @@ def _get_flds(tbl):
     return [(k, v|None, field(default=tbl.default_values.get(k,None)))
             for k,v in tbl.columns_dict.items()]
 
-@patch
-def dataclass(self:Table, store=True, suf='')->type:
+def _dataclass(self:Table, store=True, suf='')->type:
     "Create a `dataclass` with the types and defaults of this table"
     res = make_dataclass(self.name.title()+suf, _get_flds(self))
     if store: self.cls = res
     return res
+
+Table.dataclass = _dataclass
 
 # %% ../nbs/00_core.ipynb 30
 def all_dcs(db, with_views=False, store=True, suf=''):
@@ -124,7 +127,39 @@ class _ViewsGetter(_Getter):
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 50
+# %% ../nbs/00_core.ipynb 47
+@patch
+def create(
+    self: Database,
+    cls=None,  # Dataclass to create table from
+    name=None,  # Name of table to create
+    pk='id',  # Column(s) to use as a primary key
+    foreign_keys=None,  # Foreign key definitions
+    defaults=None,  # Database table defaults
+    column_order=None,  # Which columns should come first
+    not_null=None,  # Columns that should be created as ``NOT NULL``
+    hash_id=None,  # Column to be used as a primary key using hash
+    hash_id_columns=None,  # Columns used when calculating hash
+    extracts=None,  # Columns to be extracted during inserts
+    if_not_exists=False,  # Use `CREATE TABLE IF NOT EXISTS`
+    replace=False,  # Drop and replace table if it already exists
+    ignore=True,  # Silently do nothing if table already exists
+    transform=False,  # If table exists transform it to fit schema
+    strict=False,  # Apply STRICT mode to table
+):
+    "Create table from `cls`, default name to snake-case version of class name"
+    mk_dataclass(cls)
+    if name is None: name = camel2snake(cls.__name__)
+    typs = {o.name: o.type for o in fields(cls)}
+    res = self.create_table(
+        name, typs, defaults=defaults,
+        pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
+        hash_id=hash_id, hash_id_columns=hash_id_columns, extracts=extracts, transform=transform,
+        if_not_exists=if_not_exists, replace=replace, ignore=ignore, strict=strict)
+    res.cls = cls
+    return res
+
+# %% ../nbs/00_core.ipynb 55
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -142,7 +177,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 51
+# %% ../nbs/00_core.ipynb 56
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))

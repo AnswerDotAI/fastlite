@@ -1,5 +1,8 @@
 _proc/
 db_dc.py
+*-client_wal_index
+*-shm
+*-wal
 *.sqlite
 *.db
 sidebar.yml
