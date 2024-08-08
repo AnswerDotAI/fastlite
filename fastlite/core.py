@@ -104,17 +104,23 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
 # %% ../nbs/00_core.ipynb 34
 @patch
 def __call__(
-    self:(Table|View), where:str|None=None,
-    where_args: Iterable|dict|NoneType=None, with_pk:bool=False, order_by: str|None=None,
-    limit:int|None=None, offset:int|None=None, as_cls:bool=True, **kwargs)->list:
+    self:(Table|View),
+    where:str|None=None,  # SQL where fragment to use, for example `id > ?`
+    where_args: Iterable|dict|NoneType=None, # Parameters to use with `where`; iterable for `id>?`, or dict for `id>:id`
+    order_by: str|None=None, # Column or fragment of SQL to order by
+    limit:int|None=None, # Number of rows to limit to
+    offset:int|None=None, # SQL offset
+    select:str = "*", # Comma-separated list of columns to select
+    with_pk:bool=False, # Return tuple of (pk,row)?
+    as_cls:bool=True, # Convert returned dict to stored dataclass?
+    **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
-
     f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
     xtra = getattr(self, 'xtra_id', {})
     if xtra:
         xw = ' and '.join(f"[{k}] = {v!r}" for k,v in xtra.items())
         where = f'{xw} and {where}' if where else xw
-    res = f(where=where, where_args=where_args, order_by=order_by, limit=limit, offset=offset, **kwargs)
+    res = f(where=where, where_args=where_args, order_by=order_by, limit=limit, offset=offset, select=select, **kwargs)
     if as_cls and hasattr(self,'cls'):
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
         else: res = (self.cls(**o) for o in res)

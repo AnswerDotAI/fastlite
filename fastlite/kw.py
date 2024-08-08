@@ -5,7 +5,7 @@ from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Qu
 
 opt_bool = Union[bool, Default, None]
 
-def database(path, wal=True):
+def database(path, wal=True)->Any:
     path = Path(path)
     path.parent.mkdir(exist_ok=True)
     db = Database(path)
@@ -35,6 +35,7 @@ def ids_and_rows_where(
     order_by: Optional[str] = None,
     limit: Optional[int] = None,
     offset: Optional[int] = None,
+    select: str = '*',
 ) -> Generator[Tuple[Any, Dict], None, None]:
     """
     Like ``.rows_where()`` but returns ``(rowid, row)`` pairs.
@@ -47,8 +48,8 @@ def ids_and_rows_where(
     :param limit: Integer number of rows to limit to
     :param offset: Integer for SQL offset
     """
-    cs = [c.name for c in self.columns]
-    select = ",".join("[{}]".format(c) for c in cs)
+    #cs = [c.name for c in self.columns]
+    #select = ",".join("[{}]".format(c) for c in cs)
     select = "_rowid_ as __rid, " + select
     for row in self.rows_where(select=select, where=where, where_args=where_args, order_by=order_by, limit=limit, offset=offset):
         yield row.pop('__rid'), row
