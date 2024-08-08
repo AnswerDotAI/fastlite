@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Source code for fastlite">
+
+<title>Source – fastlite</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Source – fastlite">
+<meta property="og:description" content="Source code for fastlite">
+<meta property="og:site_name" content="fastlite">
+<meta name="twitter:title" content="Source – fastlite">
+<meta name="twitter:description" content="Source code for fastlite">
+<meta name="twitter:creator" content="@jeremyphoward">
+<meta name="twitter:site" content="@jeremyphoward">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">fastlite</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/AnswerDotAI/fastlite"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./core.html">Source</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fastlite</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Source</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link active" data-scroll-target="#metadata">Metadata</a>
+  <ul class="collapse">
+  <li><a href="#database.t" id="toc-database.t" class="nav-link" data-scroll-target="#database.t">Database.t</a></li>
+  <li><a href="#view.c" id="toc-view.c" class="nav-link" data-scroll-target="#view.c">View.c</a></li>
+  <li><a href="#table.c" id="toc-table.c" class="nav-link" data-scroll-target="#table.c">Table.c</a></li>
+  <li><a href="#view.__str__" id="toc-view.__str__" class="nav-link" data-scroll-target="#view.__str__">View.__str__</a></li>
+  <li><a href="#table.__str__" id="toc-table.__str__" class="nav-link" data-scroll-target="#table.__str__">Table.__str__</a></li>
+  </ul></li>
+  <li><a href="#queries-and-views" id="toc-queries-and-views" class="nav-link" data-scroll-target="#queries-and-views">Queries and views</a>
+  <ul class="collapse">
+  <li><a href="#database.q" id="toc-database.q" class="nav-link" data-scroll-target="#database.q">Database.q</a></li>
+  <li><a href="#all_dcs" id="toc-all_dcs" class="nav-link" data-scroll-target="#all_dcs">all_dcs</a></li>
+  <li><a href="#create_mod" id="toc-create_mod" class="nav-link" data-scroll-target="#create_mod">create_mod</a></li>
+  <li><a href="#call" id="toc-call" class="nav-link" data-scroll-target="#call"><strong>call</strong>’]</a></li>
+  <li><a href="#database.v" id="toc-database.v" class="nav-link" data-scroll-target="#database.v">Database.v</a></li>
+  <li><a href="#database.create" id="toc-database.create" class="nav-link" data-scroll-target="#database.create">Database.create</a></li>
+  </ul></li>
+  <li><a href="#database-diagrams" id="toc-database-diagrams" class="nav-link" data-scroll-target="#database-diagrams">Database diagrams</a>
+  <ul class="collapse">
+  <li><a href="#diagram" id="toc-diagram" class="nav-link" data-scroll-target="#diagram">diagram</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.dev/AnswerDotAI/fastlite/blob/main/nbs/00_core.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/AnswerDotAI/fastlite/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/AnswerDotAI/fastlite/blob/main/nbs/00_core.ipynb" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Source</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+</div>
+
+<div>
+  <div class="description">
+    Source code for fastlite
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="metadata" class="level2">
+<h2 class="anchored" data-anchor-id="metadata">Metadata</h2>
+<div id="cell-3" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> Database(<span class="st">"chinook.sqlite"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L38" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="database.t" class="level3">
+<h3 class="anchored" data-anchor-id="database.t">Database.t</h3>
+<blockquote class="blockquote">
+<pre><code> Database.t ()</code></pre>
+</blockquote>
+<div id="cell-6" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _Getter:</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Abstract class with dynamic attributes providing access to DB objects"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, db): <span class="va">self</span>.db <span class="op">=</span> db</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># NB: Define `__dir__` in subclass to get list of objects</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="st">", "</span>.join(<span class="bu">dir</span>(<span class="va">self</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__contains__</span>(<span class="va">self</span>, s): <span class="cf">return</span> (s <span class="cf">if</span> <span class="bu">isinstance</span>(s,<span class="bu">str</span>) <span class="cf">else</span> s.name) <span class="kw">in</span> <span class="bu">dir</span>(<span class="va">self</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idxs):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(idxs,<span class="bu">str</span>): <span class="cf">return</span> <span class="va">self</span>.db.table(idxs)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="va">self</span>.db.table(o) <span class="cf">for</span> o <span class="kw">in</span> idxs]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getattr__</span>(<span class="va">self</span>, k):</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k[<span class="dv">0</span>]<span class="op">==</span><span class="st">'_'</span>: <span class="cf">raise</span> <span class="pp">AttributeError</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.db[k]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _TablesGetter(_Getter):</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__dir__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="va">self</span>.db.table_names()</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span>(as_prop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> t(<span class="va">self</span>:Database): <span class="cf">return</span> _TablesGetter(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>By returning a <a href="https://AnswerDotAI.github.io/fastlite/core.html#_tablesgetter"><code>_TablesGetter</code></a> we get a repr and auto-complete that shows all tables in the DB.</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> db.t</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Album, Artist, Customer, Employee, Genre, Invoice, InvoiceLine, MediaType, Playlist, PlaylistTrack, Track</code></pre>
+</div>
+</div>
+<div id="cell-9" class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>artist <span class="op">=</span> dt.Artist</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>artist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Table Artist (ArtistId, Name)&gt;</code></pre>
+</div>
+</div>
+<p>This also can be used to get multiple tables at once.</p>
+<div id="cell-11" class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dt[<span class="st">'Album'</span>,<span class="st">'Artist'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[&lt;Table Album (AlbumId, Title, ArtistId)&gt;, &lt;Table Artist (ArtistId, Name)&gt;]</code></pre>
+</div>
+</div>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'Artist'</span> <span class="kw">in</span> dt</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> artist <span class="kw">in</span> dt</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'foo'</span> <span class="kw">not</span> <span class="kw">in</span> dt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L62" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="view.c" class="level3">
+<h3 class="anchored" data-anchor-id="view.c">View.c</h3>
+<blockquote class="blockquote">
+<pre><code> View.c ()</code></pre>
+</blockquote>
+<div id="cell-14" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _Col:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, t, c): <span class="va">self</span>.t,<span class="va">self</span>.c <span class="op">=</span> t,c</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>):  <span class="cf">return</span> <span class="ss">f'"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>t<span class="sc">}</span><span class="ss">"."</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>c<span class="sc">}</span><span class="ss">"'</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):  <span class="cf">return</span> <span class="va">self</span>.c</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__iter__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="bu">iter</span>(<span class="va">self</span>.c)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _ColsGetter:</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, tbl): <span class="va">self</span>.tbl <span class="op">=</span> tbl</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__dir__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="bu">map</span>(<span class="bu">repr</span>, <span class="va">self</span>())</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>): <span class="cf">return</span> [_Col(<span class="va">self</span>.tbl.name,o.name) <span class="cf">for</span> o <span class="kw">in</span> <span class="va">self</span>.tbl.columns]</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__contains__</span>(<span class="va">self</span>, s): <span class="cf">return</span> (s <span class="cf">if</span> <span class="bu">isinstance</span>(s,<span class="bu">str</span>) <span class="cf">else</span> s.c) <span class="kw">in</span> <span class="va">self</span>.tbl.columns_dict</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="st">", "</span>.join(<span class="bu">dir</span>(<span class="va">self</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getattr__</span>(<span class="va">self</span>, k):</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> k[<span class="dv">0</span>]<span class="op">==</span><span class="st">'_'</span>: <span class="cf">raise</span> <span class="pp">AttributeError</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> _Col(<span class="va">self</span>.tbl.name, k)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span>(as_prop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> c(<span class="va">self</span>:Table): <span class="cf">return</span> _ColsGetter(<span class="va">self</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span>(as_prop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> c(<span class="va">self</span>:View): <span class="cf">return</span> _ColsGetter(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L59" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="table.c" class="level3">
+<h3 class="anchored" data-anchor-id="table.c">Table.c</h3>
+<blockquote class="blockquote">
+<pre><code> Table.c ()</code></pre>
+</blockquote>
+<p>Column auto-complete and repr are much the same as tables.</p>
+<div id="cell-17" class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ac <span class="op">=</span> artist.c</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>ArtistId, Name</code></pre>
+</div>
+</div>
+<p>Columns stringify in a format suitable for including in SQL statements.</p>
+<div id="cell-19" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"select </span><span class="sc">{</span>ac<span class="sc">.</span>Name<span class="sc">}</span><span class="ss"> ..."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>select "Artist"."Name" ...</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L69" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="view.__str__" class="level3">
+<h3 class="anchored" data-anchor-id="view.__str__">View.__str__</h3>
+<blockquote class="blockquote">
+<pre><code> View.__str__ ()</code></pre>
+</blockquote>
+<p><em>Return str(self).</em></p>
+<div id="cell-21" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>:Table): <span class="cf">return</span> <span class="ss">f'"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">"'</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>:View): <span class="cf">return</span> <span class="ss">f'"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">"'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L66" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="table.__str__" class="level3">
+<h3 class="anchored" data-anchor-id="table.__str__">Table.__str__</h3>
+<blockquote class="blockquote">
+<pre><code> Table.__str__ ()</code></pre>
+</blockquote>
+<p><em>Return str(self).</em></p>
+<p>Tables and views do the same.</p>
+<div id="cell-24" class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"select </span><span class="sc">{</span>ac<span class="sc">.</span>Name<span class="sc">}</span><span class="ss"> from </span><span class="sc">{</span>artist<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>select "Artist"."Name" from "Artist"</code></pre>
+</div>
+</div>
+<div id="cell-25" class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'Name'</span> <span class="kw">in</span> ac</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> ac.Name <span class="kw">in</span> ac</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'foo'</span> <span class="kw">not</span> <span class="kw">in</span> ac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="queries-and-views" class="level2">
+<h2 class="anchored" data-anchor-id="queries-and-views">Queries and views</h2>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L73" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="database.q" class="level3">
+<h3 class="anchored" data-anchor-id="database.q">Database.q</h3>
+<blockquote class="blockquote">
+<pre><code> Database.q (sql:str, params=None)</code></pre>
+</blockquote>
+<div id="cell-28" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> q(<span class="va">self</span>:Database, sql: <span class="bu">str</span>, params <span class="op">=</span> <span class="va">None</span>)<span class="op">-&gt;</span><span class="bu">list</span>:</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="va">self</span>.query(sql, params<span class="op">=</span>params))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This is a minor shortcut for interactive use.</p>
+<div id="cell-30" class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>acdc <span class="op">=</span> db.q(<span class="ss">f"select * from </span><span class="sc">{</span>artist<span class="sc">}</span><span class="ss"> where </span><span class="sc">{</span>ac<span class="sc">.</span>Name<span class="sc">}</span><span class="ss"> like 'AC/%'"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>acdc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[{'ArtistId': 1, 'Name': 'AC/DC'}]</code></pre>
+</div>
+</div>
+<div id="cell-31" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _get_flds(tbl): </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [(k, v<span class="op">|</span><span class="va">None</span>, field(default<span class="op">=</span>tbl.default_values.get(k,<span class="va">None</span>)))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> k,v <span class="kw">in</span> tbl.columns_dict.items()]</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _dataclass(<span class="va">self</span>:Table, store<span class="op">=</span><span class="va">True</span>, suf<span class="op">=</span><span class="st">''</span>)<span class="op">-&gt;</span><span class="bu">type</span>:</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a `dataclass` with the types and defaults of this table"</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> make_dataclass(<span class="va">self</span>.name.title()<span class="op">+</span>suf, _get_flds(<span class="va">self</span>))</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> store: <span class="va">self</span>.cls <span class="op">=</span> res</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>Table.dataclass <span class="op">=</span> _dataclass</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-32" class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>artist_dc <span class="op">=</span> artist.dataclass()</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>art1_obj <span class="op">=</span> artist_dc(<span class="op">**</span>acdc[<span class="dv">0</span>])</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>art1_obj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Artist(ArtistId=1, Name='AC/DC')</code></pre>
+</div>
+</div>
+<p>You can get the definition of the dataclass using fastcore’s <code>dataclass_src</code>:</p>
+<div id="cell-34" class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>src <span class="op">=</span> dataclass_src(artist_dc)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>hl_md(src, <span class="st">'python'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Artist:</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    ArtistId: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    Name: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L90" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="all_dcs" class="level3">
+<h3 class="anchored" data-anchor-id="all_dcs">all_dcs</h3>
+<blockquote class="blockquote">
+<pre><code> all_dcs (db, with_views=False, store=True, suf='')</code></pre>
+</blockquote>
+<p><em>dataclasses for all objects in <code>db</code></em></p>
+<div id="cell-36" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> all_dcs(db, with_views<span class="op">=</span><span class="va">False</span>, store<span class="op">=</span><span class="va">True</span>, suf<span class="op">=</span><span class="st">''</span>):</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"dataclasses for all objects in `db`"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [o.dataclass(store<span class="op">=</span>store, suf<span class="op">=</span>suf) <span class="cf">for</span> o <span class="kw">in</span> db.tables <span class="op">+</span> (db.views <span class="cf">if</span> with_views <span class="cf">else</span> [])]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L95" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="create_mod" class="level3">
+<h3 class="anchored" data-anchor-id="create_mod">create_mod</h3>
+<blockquote class="blockquote">
+<pre><code> create_mod (db, mod_fn, with_views=False, store=True, suf='')</code></pre>
+</blockquote>
+<p><em>Create module for dataclasses for <code>db</code></em></p>
+<div id="cell-38" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_mod(db, mod_fn, with_views<span class="op">=</span><span class="va">False</span>, store<span class="op">=</span><span class="va">True</span>, suf<span class="op">=</span><span class="st">''</span>):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create module for dataclasses for `db`"</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    mod_fn <span class="op">=</span> <span class="bu">str</span>(mod_fn)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> mod_fn.endswith(<span class="st">'.py'</span>): mod_fn<span class="op">+=</span><span class="st">'.py'</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(mod_fn, <span class="st">'w'</span>) <span class="im">as</span> f:</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'from dataclasses import dataclass'</span>, <span class="bu">file</span><span class="op">=</span>f)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'from typing import Any,Union,Optional</span><span class="ch">\n</span><span class="st">'</span>, <span class="bu">file</span><span class="op">=</span>f)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> o <span class="kw">in</span> all_dcs(db, with_views, store<span class="op">=</span>store, suf<span class="op">=</span>suf): <span class="bu">print</span>(dataclass_src(o), <span class="bu">file</span><span class="op">=</span>f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-39" class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>create_mod(db, <span class="st">'db_dc'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-40" class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> db_dc <span class="im">import</span> Track</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>Track(<span class="op">**</span>dt.Track.get(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Track(TrackId=1, Name='For Those About To Rock (We Salute You)', AlbumId=1, MediaTypeId=1, GenreId=1, Composer='Angus Young, Malcolm Young, Brian Johnson', Milliseconds=343719, Bytes=11170334, UnitPrice=0.99)</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="call" class="level3">
+<h3 class="anchored" data-anchor-id="call"><strong>call</strong>’]</h3>
+<p>*Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list. The argument must be an iterable if specified.*</p>
+<div id="cell-42" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__call__</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>:(Table<span class="op">|</span>View),</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    where:<span class="bu">str</span><span class="op">|</span><span class="va">None</span><span class="op">=</span><span class="va">None</span>,  <span class="co"># SQL where fragment to use, for example `id &gt; ?`</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    where_args: Iterable<span class="op">|</span><span class="bu">dict</span><span class="op">|</span>NoneType<span class="op">=</span><span class="va">None</span>, <span class="co"># Parameters to use with `where`; iterable for `id&gt;?`, or dict for `id&gt;:id`</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    order_by: <span class="bu">str</span><span class="op">|</span><span class="va">None</span><span class="op">=</span><span class="va">None</span>, <span class="co"># Column or fragment of SQL to order by</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    limit:<span class="bu">int</span><span class="op">|</span><span class="va">None</span><span class="op">=</span><span class="va">None</span>, <span class="co"># Number of rows to limit to</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    offset:<span class="bu">int</span><span class="op">|</span><span class="va">None</span><span class="op">=</span><span class="va">None</span>, <span class="co"># SQL offset</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    select:<span class="bu">str</span> <span class="op">=</span> <span class="st">"*"</span>, <span class="co"># Comma-separated list of columns to select</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    with_pk:<span class="bu">bool</span><span class="op">=</span><span class="va">False</span>, <span class="co"># Return tuple of (pk,row)?</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    as_cls:<span class="bu">bool</span><span class="op">=</span><span class="va">True</span>, <span class="co"># Convert returned dict to stored dataclass?</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs)<span class="op">-&gt;</span><span class="bu">list</span>:</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, <span class="st">'pks_and_rows_where'</span> <span class="cf">if</span> with_pk <span class="cf">else</span> <span class="st">'rows_where'</span>)</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    xtra <span class="op">=</span> <span class="bu">getattr</span>(<span class="va">self</span>, <span class="st">'xtra_id'</span>, {})</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> xtra:</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        xw <span class="op">=</span> <span class="st">' and '</span>.join(<span class="ss">f"[</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">] = </span><span class="sc">{</span>v<span class="sc">!r}</span><span class="ss">"</span> <span class="cf">for</span> k,v <span class="kw">in</span> xtra.items())</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>        where <span class="op">=</span> <span class="ss">f'</span><span class="sc">{</span>xw<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>where<span class="sc">}</span><span class="ss">'</span> <span class="cf">if</span> where <span class="cf">else</span> xw</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> f(where<span class="op">=</span>where, where_args<span class="op">=</span>where_args, order_by<span class="op">=</span>order_by, limit<span class="op">=</span>limit, offset<span class="op">=</span>offset, select<span class="op">=</span>select, <span class="op">**</span>kwargs)</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> as_cls <span class="kw">and</span> <span class="bu">hasattr</span>(<span class="va">self</span>,<span class="st">'cls'</span>):</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> with_pk: res <span class="op">=</span> ((k,<span class="va">self</span>.cls(<span class="op">**</span>v)) <span class="cf">for</span> k,v <span class="kw">in</span> res)</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>: res <span class="op">=</span> (<span class="va">self</span>.cls(<span class="op">**</span>o) <span class="cf">for</span> o <span class="kw">in</span> res)</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>This calls either <code>rows_where</code> (if <code>with_pk</code>) or <code>with_pk</code> (otherwise). If <code>dataclass(store=True)</code> has been called, then if <code>as_cls</code> rows will be returned as dataclass objects.</p>
+<div id="cell-44" class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>artist(limit<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[Artist(ArtistId=1, Name='AC/DC'), Artist(ArtistId=2, Name='Accept')]</code></pre>
+</div>
+</div>
+<p>If <code>with_pk</code> then tuples are returns with PKs 1st.</p>
+<div id="cell-46" class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>artist(with_pk<span class="op">=</span><span class="va">True</span>, limit<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[(1, Artist(ArtistId=1, Name='AC/DC')), (2, Artist(ArtistId=2, Name='Accept'))]</code></pre>
+</div>
+</div>
+<div id="cell-47" class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>artist.get(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'ArtistId': 1, 'Name': 'AC/DC'}</code></pre>
+</div>
+</div>
+<div id="cell-48" class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>album <span class="op">=</span> dt.Album</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>acca_sql <span class="op">=</span> <span class="ss">f"""select </span><span class="sc">{</span>album<span class="sc">}</span><span class="ss">.*</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="ss">from </span><span class="sc">{</span>album<span class="sc">}</span><span class="ss"> join </span><span class="sc">{</span>artist<span class="sc">}</span><span class="ss"> using (ArtistId)</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="ss">where </span><span class="sc">{</span>ac<span class="sc">.</span>Name<span class="sc">}</span><span class="ss"> like 'AC/%'"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-49" class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>hl_md(acca_sql, <span class="st">'sql'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<div class="sourceCode" id="cb50"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="ot">"Album"</span>.<span class="op">*</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> <span class="ot">"Album"</span> <span class="kw">join</span> <span class="ot">"Artist"</span> <span class="kw">using</span> (ArtistId)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> <span class="ot">"Artist"</span>.<span class="ot">"Name"</span> <span class="kw">like</span> <span class="st">'AC/%'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="cell-50" class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>db.q(acca_sql)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[{'AlbumId': 1,
+  'Title': 'For Those About To Rock We Salute You',
+  'ArtistId': 1},
+ {'AlbumId': 4, 'Title': 'Let There Be Rock', 'ArtistId': 1}]</code></pre>
+</div>
+</div>
+<div id="cell-51" class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>db.create_view(<span class="st">"AccaDaccaAlbums"</span>, acca_sql, replace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Database &lt;sqlite3.Connection object&gt;&gt;</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L134" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="database.v" class="level3">
+<h3 class="anchored" data-anchor-id="database.v">Database.v</h3>
+<blockquote class="blockquote">
+<pre><code> Database.v ()</code></pre>
+</blockquote>
+<div id="cell-53" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> _ViewsGetter(_Getter):</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__dir__</span>(<span class="va">self</span>): <span class="cf">return</span> <span class="va">self</span>.db.view_names()</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span>(as_prop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> v(<span class="va">self</span>:Database): <span class="cf">return</span> _ViewsGetter(<span class="va">self</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-54" class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>dv <span class="op">=</span> db.v</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>dv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>AccaDaccaAlbums</code></pre>
+</div>
+</div>
+<div id="cell-55" class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>dv.AccaDaccaAlbums()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>[{'AlbumId': 1,
+  'Title': 'For Those About To Rock We Salute You',
+  'ArtistId': 1},
+ {'AlbumId': 4, 'Title': 'Let There Be Rock', 'ArtistId': 1}]</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L138" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="database.create" class="level3">
+<h3 class="anchored" data-anchor-id="database.create">Database.create</h3>
+<blockquote class="blockquote">
+<pre><code> Database.create (cls=None, name=None, pk='id', foreign_keys=None,
+                  defaults=None, column_order=None, not_null=None,
+                  hash_id=None, hash_id_columns=None, extracts=None,
+                  if_not_exists=False, replace=False, ignore=True,
+                  transform=False, strict=False)</code></pre>
+</blockquote>
+<p><em>Create table from <code>cls</code>, default name to snake-case version of class name</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Dataclass to create table from</td>
+</tr>
+<tr class="even">
+<td>name</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Name of table to create</td>
+</tr>
+<tr class="odd">
+<td>pk</td>
+<td>str</td>
+<td>id</td>
+<td>Column(s) to use as a primary key</td>
+</tr>
+<tr class="even">
+<td>foreign_keys</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Foreign key definitions</td>
+</tr>
+<tr class="odd">
+<td>defaults</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Database table defaults</td>
+</tr>
+<tr class="even">
+<td>column_order</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Which columns should come first</td>
+</tr>
+<tr class="odd">
+<td>not_null</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Columns that should be created as <code>NOT NULL</code></td>
+</tr>
+<tr class="even">
+<td>hash_id</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Column to be used as a primary key using hash</td>
+</tr>
+<tr class="odd">
+<td>hash_id_columns</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Columns used when calculating hash</td>
+</tr>
+<tr class="even">
+<td>extracts</td>
+<td>NoneType</td>
+<td>None</td>
+<td>Columns to be extracted during inserts</td>
+</tr>
+<tr class="odd">
+<td>if_not_exists</td>
+<td>bool</td>
+<td>False</td>
+<td>Use <code>CREATE TABLE IF NOT EXISTS</code></td>
+</tr>
+<tr class="even">
+<td>replace</td>
+<td>bool</td>
+<td>False</td>
+<td>Drop and replace table if it already exists</td>
+</tr>
+<tr class="odd">
+<td>ignore</td>
+<td>bool</td>
+<td>True</td>
+<td>Silently do nothing if table already exists</td>
+</tr>
+<tr class="even">
+<td>transform</td>
+<td>bool</td>
+<td>False</td>
+<td>If table exists transform it to fit schema</td>
+</tr>
+<tr class="odd">
+<td>strict</td>
+<td>bool</td>
+<td>False</td>
+<td>Apply STRICT mode to table</td>
+</tr>
+</tbody>
+</table>
+<div id="cell-57" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="at">@patch</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>: Database,</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>    cls<span class="op">=</span><span class="va">None</span>,  <span class="co"># Dataclass to create table from</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="va">None</span>,  <span class="co"># Name of table to create</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>    pk<span class="op">=</span><span class="st">'id'</span>,  <span class="co"># Column(s) to use as a primary key</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    foreign_keys<span class="op">=</span><span class="va">None</span>,  <span class="co"># Foreign key definitions</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    defaults<span class="op">=</span><span class="va">None</span>,  <span class="co"># Database table defaults</span></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    column_order<span class="op">=</span><span class="va">None</span>,  <span class="co"># Which columns should come first</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    not_null<span class="op">=</span><span class="va">None</span>,  <span class="co"># Columns that should be created as ``NOT NULL``</span></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>    hash_id<span class="op">=</span><span class="va">None</span>,  <span class="co"># Column to be used as a primary key using hash</span></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>    hash_id_columns<span class="op">=</span><span class="va">None</span>,  <span class="co"># Columns used when calculating hash</span></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>    extracts<span class="op">=</span><span class="va">None</span>,  <span class="co"># Columns to be extracted during inserts</span></span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>    if_not_exists<span class="op">=</span><span class="va">False</span>,  <span class="co"># Use `CREATE TABLE IF NOT EXISTS`</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>    replace<span class="op">=</span><span class="va">False</span>,  <span class="co"># Drop and replace table if it already exists</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>    ignore<span class="op">=</span><span class="va">True</span>,  <span class="co"># Silently do nothing if table already exists</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>    transform<span class="op">=</span><span class="va">False</span>,  <span class="co"># If table exists transform it to fit schema</span></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>    strict<span class="op">=</span><span class="va">False</span>,  <span class="co"># Apply STRICT mode to table</span></span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create table from `cls`, default name to snake-case version of class name"</span></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>    mk_dataclass(cls)</span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> name <span class="kw">is</span> <span class="va">None</span>: name <span class="op">=</span> camel2snake(cls.<span class="va">__name__</span>)</span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a>    typs <span class="op">=</span> {o.name: o.<span class="bu">type</span> <span class="cf">for</span> o <span class="kw">in</span> fields(cls)}</span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> <span class="va">self</span>.create_table(</span>
+<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>        name, typs, defaults<span class="op">=</span>defaults,</span>
+<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a>        pk<span class="op">=</span>pk, foreign_keys<span class="op">=</span>foreign_keys, column_order<span class="op">=</span>column_order, not_null<span class="op">=</span>not_null,</span>
+<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a>        hash_id<span class="op">=</span>hash_id, hash_id_columns<span class="op">=</span>hash_id_columns, extracts<span class="op">=</span>extracts, transform<span class="op">=</span>transform,</span>
+<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>        if_not_exists<span class="op">=</span>if_not_exists, replace<span class="op">=</span>replace, ignore<span class="op">=</span>ignore, strict<span class="op">=</span>strict)</span>
+<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a>    res.cls <span class="op">=</span> cls</span>
+<span id="cb62-30"><a href="#cb62-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The class you pass to <code>create</code> is converted to a dataclass where any fields missing a default are defaulted to <code>None</code>.</p>
+<div id="cell-59" class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Cat: <span class="bu">id</span>: <span class="bu">int</span><span class="op">;</span> name: <span class="bu">str</span><span class="op">;</span> age: <span class="bu">int</span><span class="op">;</span> city: <span class="bu">str</span> <span class="op">=</span> <span class="st">"Unknown"</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> db.create(Cat)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>Cat(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Cat(id=1, name=None, age=None, city='Unknown')</code></pre>
+</div>
+</div>
+<div id="cell-60" class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cats.schema)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CREATE TABLE [cat] (
+   [id] INTEGER PRIMARY KEY,
+   [name] TEXT,
+   [age] INTEGER,
+   [city] TEXT
+)</code></pre>
+</div>
+</div>
+<div id="cell-61" class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>db.t.cat.drop()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="database-diagrams" class="level2">
+<h2 class="anchored" data-anchor-id="database-diagrams">Database diagrams</h2>
+<p>(Requires graphviz.)</p>
+<div id="cell-64" class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>fk <span class="op">=</span> album.foreign_keys[<span class="dv">0</span>]</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>fk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>ForeignKey(table='Album', column='ArtistId', other_table='Artist', other_column='ArtistId')</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#L187" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="diagram" class="level3">
+<h3 class="anchored" data-anchor-id="diagram">diagram</h3>
+<blockquote class="blockquote">
+<pre><code> diagram (tbls, ratio=0.7, size='10', neato=False, render=True)</code></pre>
+</blockquote>
+<div id="cell-66" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _edge(tbl):</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(<span class="ss">f"</span><span class="sc">{</span>fk<span class="sc">.</span>table<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>fk<span class="sc">.</span>column<span class="sc">}</span><span class="ss"> -&gt; </span><span class="sc">{</span>fk<span class="sc">.</span>other_table<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>fk<span class="sc">.</span>other_column<span class="sc">}</span><span class="ss">;"</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>                     <span class="cf">for</span> fk <span class="kw">in</span> tbl.foreign_keys)</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _row(col):</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>    xtra <span class="op">=</span> <span class="st">" 🔑"</span> <span class="cf">if</span> col.is_pk <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>    bg <span class="op">=</span> <span class="st">' bgcolor="#ffebcd"'</span> <span class="cf">if</span> col.is_pk <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f'    &lt;tr&gt;&lt;td port="</span><span class="sc">{</span>col<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span><span class="sc">{</span>bg<span class="sc">}</span><span class="ss">&gt;</span><span class="sc">{</span>col<span class="sc">.</span>name<span class="sc">}{</span>xtra<span class="sc">}</span><span class="ss">&lt;/td&gt;&lt;/tr&gt;'</span></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _tnode(tbl):</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(_row(o) <span class="cf">for</span> o <span class="kw">in</span> tbl.columns)</span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> <span class="ss">f"""&lt;table cellborder="1" cellspacing="0"&gt;</span></span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;tr&gt;&lt;td bgcolor="lightgray"&gt;</span><span class="sc">{</span>tbl<span class="sc">.</span>name<span class="sc">}</span><span class="ss">&lt;/td&gt;&lt;/tr&gt;</span></span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a><span class="sc">{</span>rows<span class="sc">}</span></span>
+<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a><span class="ss">  &lt;/table&gt;"""</span></span>
+<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span>tbl<span class="sc">.</span>name<span class="sc">}</span><span class="ss"> [label=&lt;</span><span class="sc">{</span>res<span class="sc">}</span><span class="ss">&gt;];</span><span class="ch">\n</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-67" class="cell">
+<details open="" class="code-fold">
+<summary>Exported source</summary>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> diagram(tbls, ratio<span class="op">=</span><span class="fl">0.7</span>, size<span class="op">=</span><span class="st">"10"</span>, neato<span class="op">=</span><span class="va">False</span>, render<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    layout <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">layout=neato;</span><span class="ch">\n</span><span class="st">overlap=prism;</span><span class="ch">\n</span><span class="st">overlap_scaling=0.5;"""</span> <span class="cf">if</span> neato <span class="cf">else</span> <span class="st">""</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    edges  <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(<span class="bu">map</span>(_edge,  tbls))</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>    tnodes <span class="op">=</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(<span class="bu">map</span>(_tnode, tbls))</span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>    res <span class="op">=</span> <span class="ss">f"""digraph G </span><span class="ch">{{</span></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="ss">rankdir=LR;</span><span class="sc">{</span>layout<span class="sc">}</span></span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a><span class="ss">size="</span><span class="sc">{</span>size<span class="sc">}</span><span class="ss">";</span></span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="ss">ratio=</span><span class="sc">{</span>ratio<span class="sc">}</span><span class="ss">;</span></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a><span class="ss">node [shape=plaintext]</span></span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a><span class="sc">{</span>tnodes<span class="sc">}</span></span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a><span class="sc">{</span>edges<span class="sc">}</span></span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a><span class="ch">}}</span></span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Source(res) <span class="cf">if</span> render <span class="cf">else</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-68" class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>diagram(db.tables)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="00_core_files/figure-html/cell-54-output-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/AnswerDotAI\.github\.io\/fastlite");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.dev/AnswerDotAI/fastlite/blob/main/nbs/00_core.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/AnswerDotAI/fastlite/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/AnswerDotAI/fastlite/blob/main/nbs/00_core.ipynb" class="toc-action"><i class="bi empty"></i>View source</a></li></ul></div></div></div></footer></body></html>
