@@ -81,6 +81,7 @@ def _get_flds(tbl):
 def _dataclass(self:Table, store=True, suf='')->type:
     "Create a `dataclass` with the types and defaults of this table"
     res = make_dataclass(self.name.title()+suf, _get_flds(self))
+    flexiclass(res)
     if store: self.cls = res
     return res
 
@@ -154,7 +155,7 @@ def create(
     strict=False,  # Apply STRICT mode to table
 ):
     "Create table from `cls`, default name to snake-case version of class name"
-    mk_dataclass(cls)
+    flexiclass(cls)
     if name is None: name = camel2snake(cls.__name__)
     typs = {o.name: o.type for o in fields(cls)}
     res = self.create_table(
