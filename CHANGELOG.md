@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.0.8
+
+### New Features
+
+- Use flexiclass ([#16](https://github.com/AnswerDotAI/fastlite/issues/16))
+- Add `select` param ([#15](https://github.com/AnswerDotAI/fastlite/issues/15))
+
+
 ## 0.0.7
 
 ### New Features
