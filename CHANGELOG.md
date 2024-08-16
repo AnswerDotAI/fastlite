@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.9
+
+### New Features
+
+- sqlite-minutil 3.37 compatibility
+
+
 ## 0.0.8
 
 ### New Features
