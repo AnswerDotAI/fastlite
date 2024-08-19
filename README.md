@@ -43,6 +43,13 @@ dt
 You can use this to grab a single table…:
 
 ``` python
+artist = dt.artists
+artist
+```
+
+    <Table artists (does not exist yet)>
+
+``` python
 artist = dt.Artist
 artist
 ```
@@ -64,7 +71,7 @@ dt['Artist','Album','Track','Genre','MediaType']
 It also provides auto-complete in Jupyter, IPython, and nearly any other
 interactive Python environment:
 
-<img src="index_files/figure-commonmark/cell-15-1-image.png"
+<img src="index_files/figure-commonmark/cell-16-1-image.png"
 width="180" />
 
 You can check if a table is in the database already:
@@ -86,7 +93,7 @@ ac
 
 Auto-complete works for columns too:
 
-<img src="index_files/figure-commonmark/cell-20-1-image.png"
+<img src="index_files/figure-commonmark/cell-21-1-image.png"
 width="140" />
 
 Columns, tables, and view stringify in a format suitable for including
@@ -170,11 +177,17 @@ to a module, which you can then import from:
 create_mod(db, 'db_dc')
 ```
 
+``` python
+from db_dc import Track
+Track()
+```
+
+    Track(TrackId=None, Name=None, AlbumId=None, MediaTypeId=None, GenreId=None, Composer=None, Milliseconds=None, Bytes=None, UnitPrice=None)
+
 Indexing into a table does a query on primary key:
 
 ``` python
-from db_dc import Track
-Track(**dt.Track[1])
+dt.Track[1]
 ```
 
     Track(TrackId=1, Name='For Those About To Rock (We Salute You)', AlbumId=1, MediaTypeId=1, GenreId=1, Composer='Angus Young, Malcolm Young, Brian Johnson', Milliseconds=343719, Bytes=11170334, UnitPrice=0.99)
@@ -232,7 +245,7 @@ album()
     [Album(AlbumId=1, Title='For Those About To Rock We Salute You', ArtistId=1),
      Album(AlbumId=4, Title='Let There Be Rock', ArtistId=1)]
 
-## Insert, upsert, and update
+## Core design
 
 The following methods accept `**kwargs`, passing them along to the first
 `dict` param:
@@ -323,29 +336,103 @@ cat
     Cats(id=1, name='moo', weight=6.0, uid=2)
 
 ``` python
-cat.name = 'foo'
-cats.upsert(cat)
-cats()
-```
-
-    [Cats(id=1, name='foo', weight=6.0, uid=2)]
-
-``` python
 cats.drop()
 cats
 ```
 
     <Table cats (does not exist yet)>
 
+Alternatively, you can create a table from a class. If it’s not already
+a dataclass, it will be converted into one. In either case, the
+dataclass will be created (or modified) so that `None` can be passed to
+any field (this is needed to support fields such as automatic row ids).
+
+``` python
+class Cat: id:int; name:str; weight:float; uid:int
+```
+
+``` python
+cats = db.create(Cat)
+```
+
+``` python
+hl_md(cats.schema, 'sql')
+```
+
+``` sql
+CREATE TABLE [cat] (
+   [id] INTEGER PRIMARY KEY,
+   [name] TEXT,
+   [weight] FLOAT,
+   [uid] INTEGER
+)
+```
+
+``` python
+cat = Cat(name='咪咪', weight=9)
+cats.insert(cat)
+```
+
+    Cat(id=1, name='咪咪', weight=9.0, uid=None)
+
+``` python
+cats.drop()
+```
+
+## Manipulating data
+
+We try to make the following methods as flexible as possible. Wherever
+possible, they support Python dictionaries, dataclasses, and classes.
+
+### .insert()
+
+Creates a record.
+
+Insert a dictionary.
+
+``` python
+cats.insert({'name': 'Rex', 'weight': 12.2})
+```
+
+    Cat(id=1, name='Rex', weight=12.2, uid=UNSET)
+
+Insert a dataclass.
+
+``` python
+CatDC = cats.dataclass()
+cats.insert(CatDC(name='Tom', weight=10.2))
+```
+
+    Cat(id=2, name='Tom', weight=10.2)
+
+Insert a standard Python class
+
+``` python
+cat = cats.insert(Cat(name='Jerry', weight=5.2))
+```
+
+### .update()
+
+Updates a record.
+
+Update a dictionary:
+
+``` python
+cats.update(dict(id=cat.id, name='Jerry', weight=6.2))
+```
+
+    Cat(id=3, name='Jerry', weight=6.2)
+
 ## Diagrams
 
-If you have graphviz installed, you can create database diagrams:
+If you have [graphviz](https://pypi.org/project/graphviz/) installed,
+you can create database diagrams:
 
 ``` python
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-31-output-1.svg)
+![](index_files/figure-commonmark/cell-41-output-1.svg)
 
 Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -354,4 +441,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-32-output-1.svg)
+![](index_files/figure-commonmark/cell-42-output-1.svg)
