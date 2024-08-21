@@ -1,4 +1,4 @@
-from dataclasses import is_dataclass, MISSING, asdict
+from dataclasses import MISSING
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
 from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
@@ -128,7 +128,7 @@ def transform_sql(
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
            alter: bool=False, conversions: dict|None=None, **kwargs):
     if not updates: updates={}
-    if is_dataclass(updates): updates = asdict(updates)
+    updates = asdict(updates)
     xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
@@ -154,7 +154,7 @@ def insert_all(
     upsert:bool=False, analyze:bool=False,
     **kwargs) -> Table:
     xtra = getattr(self,'xtra_id',{})
-    records = [asdict(o) if is_dataclass(o) else o for o in records]
+    records = [asdict(o) for o in records]
     records = [{**o, **xtra} for o in records]
     return self._orig_insert_all(
         records=records, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -181,7 +181,7 @@ def insert(
     strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
     if not record: record={}
-    if is_dataclass(record): record = asdict(record)
+    record = asdict(record)
     record = {**record, **kwargs}
     self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -209,7 +209,7 @@ def upsert(
         assert len(self.pks)==1
         pk = self.pks[0]
     if not record: record={}
-    if is_dataclass(record): record = asdict(record)
+    record = asdict(record)
     record = {**record, **kwargs}
     last_pk = record[pk]
     self._orig_upsert(
