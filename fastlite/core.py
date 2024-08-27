@@ -6,7 +6,7 @@ __all__ = ['all_dcs', 'create_mod', 'diagram']
 # %% ../nbs/00_core.ipynb 3
 from dataclasses import dataclass, field, make_dataclass, fields, Field, is_dataclass, MISSING
 from typing import Any,Union,Optional
-from inspect import get_annotations
+from inspect import get_annotations, isclass
 
 from fastcore.utils import *
 from fastcore.xml import highlight
@@ -127,14 +127,14 @@ def __call__(
         else: res = (self.cls(**o) for o in res)
     return list(res)
 
-# %% ../nbs/00_core.ipynb 44
+# %% ../nbs/00_core.ipynb 43
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 47
+# %% ../nbs/00_core.ipynb 46
 @patch
 def create(
     self: Database,
@@ -166,7 +166,7 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 58
+# %% ../nbs/00_core.ipynb 60
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -184,7 +184,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 59
+# %% ../nbs/00_core.ipynb 61
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
