@@ -375,10 +375,6 @@ cats.insert(cat)
 
     Cat(id=1, name='咪咪', weight=9.0, uid=None)
 
-``` python
-cats.drop()
-```
-
 ## Manipulating data
 
 We try to make the following methods as flexible as possible. Wherever
@@ -386,26 +382,28 @@ possible, they support Python dictionaries, dataclasses, and classes.
 
 ### .insert()
 
-Creates a record.
+Creates a record. In the name of flexibility, we test that dictionaries,
+dataclasses, and classes all work. Returns an instance of the updated
+record.
 
-Insert a dictionary.
+Insert using a dictionary.
 
 ``` python
 cats.insert({'name': 'Rex', 'weight': 12.2})
 ```
 
-    Cat(id=1, name='Rex', weight=12.2, uid=UNSET)
+    Cat(id=2, name='Rex', weight=12.2, uid=None)
 
-Insert a dataclass.
+Insert using a dataclass.
 
 ``` python
 CatDC = cats.dataclass()
 cats.insert(CatDC(name='Tom', weight=10.2))
 ```
 
-    Cat(id=2, name='Tom', weight=10.2)
+    Cat(id=3, name='Tom', weight=10.2, uid=None)
 
-Insert a standard Python class
+Insert using a standard Python class
 
 ``` python
 cat = cats.insert(Cat(name='Jerry', weight=5.2))
@@ -413,15 +411,56 @@ cat = cats.insert(Cat(name='Jerry', weight=5.2))
 
 ### .update()
 
-Updates a record.
+Updates a record using a Python dict, dataclasses, and classes all work
+and returns an instance of the updated record.
 
-Update a dictionary:
+Updating from a Python dict:
 
 ``` python
 cats.update(dict(id=cat.id, name='Jerry', weight=6.2))
 ```
 
-    Cat(id=3, name='Jerry', weight=6.2)
+    Cat(id=4, name='Jerry', weight=6.2, uid=None)
+
+Updating from a dataclass:
+
+``` python
+cats.update(CatDC(id=cat.id, name='Jerry', weight=6.3))
+```
+
+    Cat(id=4, name='Jerry', weight=6.3, uid=None)
+
+Updating using a class:
+
+``` python
+cats.update(Cat(id=cat.id, name='Jerry', weight=5.7))
+```
+
+    Cat(id=4, name='Jerry', weight=5.7, uid=None)
+
+### .delete()
+
+Removing data is done by providing the primary key value of the record.
+
+``` python
+# Farewell Jerry!
+cats.delete(cat.id)
+```
+
+    <Table cat (id, name, weight, uid)>
+
+## Transforming Data
+
+To change a table structure, run the `Database.create` method with the
+`transform` keyword set to `True`:
+
+``` python
+class Cat: id:int; name:str; weight:float; uid:int; breed:str
+cats = db.create(Cat, transform=True)
+cats
+```
+
+    <Table cat (id, name, weight, uid, breed)>
 
 ## Diagrams
 
@@ -432,7 +471,7 @@ you can create database diagrams:
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-41-output-1.svg)
+![](index_files/figure-commonmark/cell-44-output-1.svg)
 
 Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -441,4 +480,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-42-output-1.svg)
+![](index_files/figure-commonmark/cell-45-output-1.svg)
