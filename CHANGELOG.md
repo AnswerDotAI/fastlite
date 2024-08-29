@@ -6,6 +6,19 @@
 
 ### New Features
 
+- add markdown to doc output ([#22](https://github.com/AnswerDotAI/fastlite/issues/22))
+- Use fastcore asdict instead of dataclasses asdict ([#17](https://github.com/AnswerDotAI/fastlite/pull/17)), thanks to [@pydanny](https://github.com/pydanny)
+
+### Bugs Squashed
+
+- Fix `__contains__` on tuple pk searches ([#20](https://github.com/AnswerDotAI/fastlite/pull/20)), thanks to [@pydanny](https://github.com/pydanny)
+- Compound primary keys fail on `__contains__` when done with tuple ([#19](https://github.com/AnswerDotAI/fastlite/issues/19))
+
+
+## 0.0.9
+
+### New Features
+
 - sqlite-minutil 3.37 compatibility
 
 
