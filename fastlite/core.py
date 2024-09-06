@@ -14,6 +14,7 @@ from fastcore.utils import *
 from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
 from sqlite_minutils.db import *
+from sqlite_minutils.utils import rows_from_file,TypeTracker,Format
 import types
 
 try: from graphviz import Source
@@ -168,7 +169,22 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 58
+# %% ../nbs/00_core.ipynb 55
+@patch
+def import_file(self:Database, table_name, file, format=None, pk=None):
+    "Import path or handle `file` to new table `table_name`"
+    if isinstance(file, str): file = file.encode()
+    if isinstance(file, bytes): file = io.BytesIO(file)
+    with maybe_open(file) as fp: rows, format_used = rows_from_file(fp, format=format)
+    tracker = TypeTracker()
+    rows = tracker.wrap(rows)
+    tbl = self[table_name]
+    tbl.insert_all(rows, alter=True)
+    tbl.transform(types=tracker.types)
+    if pk: tbl.transform(pk=pk)
+    return tbl
+
+# %% ../nbs/00_core.ipynb 61
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -186,7 +202,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 59
+# %% ../nbs/00_core.ipynb 62
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
