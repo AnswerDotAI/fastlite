@@ -386,9 +386,11 @@ possible, they support Python dictionaries, dataclasses, and classes.
 
 ### .insert()
 
-Creates a record.
+Creates a record. In the name of flexibility, we test that dictionaries,
+dataclasses, and classes all work. Returns an instance of the updated
+record.
 
-Insert a dictionary.
+Insert using a dictionary.
 
 ``` python
 cats.insert({'name': 'Rex', 'weight': 12.2})
@@ -396,7 +398,7 @@ cats.insert({'name': 'Rex', 'weight': 12.2})
 
     Cat(id=1, name='Rex', weight=12.2, uid=UNSET)
 
-Insert a dataclass.
+Insert using a dataclass.
 
 ``` python
 CatDC = cats.dataclass()
@@ -405,7 +407,7 @@ cats.insert(CatDC(name='Tom', weight=10.2))
 
     Cat(id=2, name='Tom', weight=10.2)
 
-Insert a standard Python class
+Insert using a standard Python class
 
 ``` python
 cat = cats.insert(Cat(name='Jerry', weight=5.2))
@@ -413,15 +415,63 @@ cat = cats.insert(Cat(name='Jerry', weight=5.2))
 
 ### .update()
 
-Updates a record.
+Updates a record using a Python dict, dataclasses, and classes all work
+and returns an instance of the updated record.
 
-Update a dictionary:
+Updating from a Python dict:
 
 ``` python
 cats.update(dict(id=cat.id, name='Jerry', weight=6.2))
 ```
 
     Cat(id=3, name='Jerry', weight=6.2)
+
+Updating from a dataclass:
+
+``` python
+cats.update(CatDC(id=cat.id, name='Jerry', weight=6.3))
+```
+
+    Cat(id=3, name='Jerry', weight=6.3)
+
+Updating using a class:
+
+``` python
+cats.update(Cat(id=cat.id, name='Jerry', weight=5.7))
+```
+
+    Cat(id=3, name='Jerry', weight=5.7)
+
+### .delete()
+
+Removing data is done by providing the primary key value of the record.
+
+``` python
+# Farewell Jerry!
+cats.delete(cat.id)
+```
+
+    <Table cat (id, name, weight)>
+
+### Importing CSV/TSV/etc
+
+You can pass a file name, string, bytes, or open file handle to
+`import_file` to import a CSV:
+
+``` python
+db = Database(":memory:")
+csv_data = """id,name,age
+1,Alice,30
+2,Bob,25
+3,Charlie,35"""
+
+table = db.import_file("people", csv_data)
+table()
+```
+
+    [{'id': 1, 'name': 'Alice', 'age': 30},
+     {'id': 2, 'name': 'Bob', 'age': 25},
+     {'id': 3, 'name': 'Charlie', 'age': 35}]
 
 ## Diagrams
 
@@ -432,7 +482,7 @@ you can create database diagrams:
 diagram(db.tables)
 ```
 
-![](index_files/figure-commonmark/cell-41-output-1.svg)
+![](index_files/figure-commonmark/cell-45-output-1.svg)
 
 Pass a subset of tables to just diagram those. You can also adjust the
 size and aspect ratio.
@@ -441,4 +491,4 @@ size and aspect ratio.
 diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
 ```
 
-![](index_files/figure-commonmark/cell-42-output-1.svg)
+![](index_files/figure-commonmark/cell-46-output-1.svg)
