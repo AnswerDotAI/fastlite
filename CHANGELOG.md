@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.11
+
+### New Features
+
+- add `import_file` ([#24](https://github.com/AnswerDotAI/fastlite/issues/24))
+
+
 ## 0.0.10
 
 ### New Features
