@@ -20,7 +20,7 @@ import types
 try: from graphviz import Source
 except ImportError: pass
 
-# %% ../nbs/00_core.ipynb 6
+# %% ../nbs/00_core.ipynb 7
 class _Getter:
     "Abstract class with dynamic attributes providing access to DB objects"
     def __init__(self, db): self.db = db
@@ -40,7 +40,7 @@ class _TablesGetter(_Getter):
 @patch(as_prop=True)
 def t(self:Database): return _TablesGetter(self)
 
-# %% ../nbs/00_core.ipynb 13
+# %% ../nbs/00_core.ipynb 15
 class _Col:
     def __init__(self, t, c): self.t,self.c = t,c
     def __str__(self):  return f'"{self.t}"."{self.c}"'
@@ -64,19 +64,19 @@ def c(self:Table): return _ColsGetter(self)
 @patch(as_prop=True)
 def c(self:View): return _ColsGetter(self)
 
-# %% ../nbs/00_core.ipynb 18
+# %% ../nbs/00_core.ipynb 20
 @patch
 def __str__(self:Table): return f'"{self.name}"'
 
 @patch
 def __str__(self:View): return f'"{self.name}"'
 
-# %% ../nbs/00_core.ipynb 23
+# %% ../nbs/00_core.ipynb 25
 @patch
 def q(self:Database, sql: str, params = None)->list:
     return list(self.query(sql, params=params))
 
-# %% ../nbs/00_core.ipynb 26
+# %% ../nbs/00_core.ipynb 28
 def _get_flds(tbl): 
     return [(k, v|None, field(default=tbl.default_values.get(k,None)))
             for k,v in tbl.columns_dict.items()]
@@ -90,12 +90,12 @@ def _dataclass(self:Table, store=True, suf='')->type:
 
 Table.dataclass = _dataclass
 
-# %% ../nbs/00_core.ipynb 30
+# %% ../nbs/00_core.ipynb 32
 def all_dcs(db, with_views=False, store=True, suf=''):
     "dataclasses for all objects in `db`"
     return [o.dataclass(store=store, suf=suf) for o in db.tables + (db.views if with_views else [])]
 
-# %% ../nbs/00_core.ipynb 31
+# %% ../nbs/00_core.ipynb 33
 def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
     "Create module for dataclasses for `db`"
     mod_fn = str(mod_fn)
@@ -105,7 +105,7 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
         print('from typing import Any,Union,Optional\n', file=f)
         for o in all_dcs(db, with_views, store=store, suf=suf): print(dataclass_src(o), file=f)
 
-# %% ../nbs/00_core.ipynb 34
+# %% ../nbs/00_core.ipynb 36
 @patch
 def __call__(
     self:(Table|View),
@@ -130,14 +130,14 @@ def __call__(
         else: res = (self.cls(**o) for o in res)
     return list(res)
 
-# %% ../nbs/00_core.ipynb 44
+# %% ../nbs/00_core.ipynb 46
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 47
+# %% ../nbs/00_core.ipynb 49
 @patch
 def create(
     self: Database,
@@ -169,9 +169,9 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 55
+# %% ../nbs/00_core.ipynb 57
 @patch
-def import_file(self:Database, table_name, file, format=None, pk=None):
+def import_file(self:Database, table_name, file, format=None, pk=None, alter=False):
     "Import path or handle `file` to new table `table_name`"
     if isinstance(file, str): file = file.encode()
     if isinstance(file, bytes): file = io.BytesIO(file)
@@ -179,12 +179,12 @@ def import_file(self:Database, table_name, file, format=None, pk=None):
     tracker = TypeTracker()
     rows = tracker.wrap(rows)
     tbl = self[table_name]
-    tbl.insert_all(rows, alter=True)
+    tbl.insert_all(rows, alter=alter)
     tbl.transform(types=tracker.types)
     if pk: tbl.transform(pk=pk)
     return tbl
 
-# %% ../nbs/00_core.ipynb 61
+# %% ../nbs/00_core.ipynb 63
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -202,7 +202,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 62
+# %% ../nbs/00_core.ipynb 64
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
