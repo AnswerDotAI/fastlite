@@ -1,0 +1,9 @@
+# Fastlite and sqlite-utils
+
+> Fastlite builds on top of sqlite-utils; generally you will want to use both
+
+## Docs
+
+- [Fastlite docs](https://answerdotai.github.io/fastlite/index.html.md): Fastlite docs home page
+- [sqlite-utils docs](https://sqlite-utils.datasette.io/en/stable/_sources/python-api.rst.txt): Full sqlite-utils documentation
+
