@@ -30,24 +30,14 @@ def get_last(self:Table, as_cls:bool=True):
 @patch
 def ids_and_rows_where(
     self:Table,
-    where: Optional[str] = None,
-    where_args: Optional[Union[Iterable, dict]] = None,
-    order_by: Optional[str] = None,
-    limit: Optional[int] = None,
-    offset: Optional[int] = None,
-    select: str = '*',
+    where: Optional[str] = None, # SQL where fragment to use, for example ``id > ?``
+    where_args: Optional[Union[Iterable, dict]] = None, # Parameters to use with that fragment
+    order_by: Optional[str] = None, # Column or fragment of SQL to order by
+    limit: Optional[int] = None, # Number of rows to limit to
+    offset: Optional[int] = None, # SQL offset
+    select: str = '*', # Comma-separated list of columns to select - defaults to ``*``
 ) -> Generator[Tuple[Any, Dict], None, None]:
-    """
-    Like ``.rows_where()`` but returns ``(rowid, row)`` pairs.
-
-    :param where: SQL where fragment to use, for example ``id > ?``
-    :param where_args: Parameters to use with that fragment - an iterable for ``id > ?``
-      parameters, or a dictionary for ``id > :id``
-    :param order_by: Column or fragment of SQL to order by
-    :param select: Comma-separated list of columns to select - defaults to ``*``
-    :param limit: Integer number of rows to limit to
-    :param offset: Integer for SQL offset
-    """
+    "Like `.rows_where()` but returns `(rowid, row)` pairs."
     #cs = [c.name for c in self.columns]
     #select = ",".join("[{}]".format(c) for c in cs)
     select = "_rowid_ as __rid, " + select
