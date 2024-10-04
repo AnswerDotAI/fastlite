@@ -139,17 +139,18 @@ class _ViewsGetter(_Getter):
 def v(self:Database): return _ViewsGetter(self)
 
 # %% ../nbs/00_core.ipynb 48
-def _enum_types(e): return set(e.__annotations__.values())
+def _parse_typ(t): return t if not (_args:= get_args(t)) else first(_args, bool)  
+
+# %% ../nbs/00_core.ipynb 50
 def _is_enum(o): return isinstance(o, type) and issubclass(o, Enum)
+def _enum_types(e): return {_parse_typ(t) for t in e.__annotations__.values()}
 
 def get_typ(t):
     "Get the underlying type."
     if _is_enum(t) and len(types:=_enum_types(t)) == 1: return first(types)
-    _args = get_args(t)
-    if not _args: return t
-    return first(_args, bool)
+    return _parse_typ(t)
 
-# %% ../nbs/00_core.ipynb 54
+# %% ../nbs/00_core.ipynb 56
 @patch
 def create(
     self: Database,
@@ -181,7 +182,7 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 63
+# %% ../nbs/00_core.ipynb 67
 @patch
 def import_file(self:Database, table_name, file, format=None, pk=None, alter=False):
     "Import path or handle `file` to new table `table_name`"
@@ -196,7 +197,7 @@ def import_file(self:Database, table_name, file, format=None, pk=None, alter=Fal
     if pk: tbl.transform(pk=pk)
     return tbl
 
-# %% ../nbs/00_core.ipynb 69
+# %% ../nbs/00_core.ipynb 73
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -214,7 +215,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 70
+# %% ../nbs/00_core.ipynb 74
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
