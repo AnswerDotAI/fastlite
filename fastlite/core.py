@@ -181,7 +181,7 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 62
+# %% ../nbs/00_core.ipynb 63
 @patch
 def import_file(self:Database, table_name, file, format=None, pk=None, alter=False):
     "Import path or handle `file` to new table `table_name`"
@@ -196,7 +196,7 @@ def import_file(self:Database, table_name, file, format=None, pk=None, alter=Fal
     if pk: tbl.transform(pk=pk)
     return tbl
 
-# %% ../nbs/00_core.ipynb 68
+# %% ../nbs/00_core.ipynb 69
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -214,7 +214,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 69
+# %% ../nbs/00_core.ipynb 70
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
