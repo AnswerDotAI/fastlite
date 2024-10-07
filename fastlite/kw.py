@@ -113,7 +113,7 @@ def transform_sql(
             types=types, rename=rename, drop=drop, pk=pk, not_null=not_null, defaults=defaults,
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
-#TODO
+
 def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items()}
 
 @patch
