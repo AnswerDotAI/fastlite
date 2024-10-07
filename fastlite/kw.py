@@ -2,6 +2,7 @@ from dataclasses import MISSING
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
 from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
+from enum import Enum
 
 opt_bool = Union[bool, Default, None]
 
@@ -112,13 +113,14 @@ def transform_sql(
             types=types, rename=rename, drop=drop, pk=pk, not_null=not_null, defaults=defaults,
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
-
+#TODO
+def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items()}
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
            alter: bool=False, conversions: dict|None=None, **kwargs):
     if not updates: updates={}
-    updates = asdict(updates)
+    updates = _process_row(updates)
     xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
@@ -144,7 +146,7 @@ def insert_all(
     upsert:bool=False, analyze:bool=False,
     **kwargs) -> Table:
     xtra = getattr(self,'xtra_id',{})
-    records = [asdict(o) for o in records]
+    records = [_process_row(o) for o in records]
     records = [{**o, **xtra} for o in records]
     return self._orig_insert_all(
         records=records, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -171,7 +173,7 @@ def insert(
     strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
     if not record: record={}
-    record = asdict(record)
+    record = _process_row(record)
     record = {**record, **kwargs}
     self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -199,7 +201,7 @@ def upsert(
         assert len(self.pks)==1
         pk = self.pks[0]
     if not record: record={}
-    record = asdict(record)
+    record = _process_row(record)
     record = {**record, **kwargs}
     last_pk = record[pk]
     self._orig_upsert(
