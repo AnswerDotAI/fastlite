@@ -118,10 +118,11 @@ def __call__(
     select:str = "*", # Comma-separated list of columns to select
     with_pk:bool=False, # Return tuple of (pk,row)?
     as_cls:bool=True, # Convert returned dict to stored dataclass?
+    xtra:dict|None=None, # Extra constraints
     **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
     f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
-    xtra = getattr(self, 'xtra_id', {})
+    if not xtra: xtra = getattr(self, 'xtra_id', {})
     if xtra:
         xw = ' and '.join(f"[{k}] = {v!r}" for k,v in xtra.items())
         where = f'{xw} and {where}' if where else xw

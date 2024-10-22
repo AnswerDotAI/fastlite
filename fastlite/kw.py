@@ -46,10 +46,10 @@ def ids_and_rows_where(
         yield row.pop('__rid'), row
 
 @patch
-def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True)->Any:
+def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True, xtra:dict|None=None)->Any:
     if not isinstance(pk_values, (list, tuple)): pk_values = [pk_values]
     last_pk = pk_values[0] if len(self.pks) == 1 else pk_values
-    xtra = getattr(self, 'xtra_id', {})
+    if not xtra: xtra = getattr(self, 'xtra_id', {})
     vals = list(pk_values) + list(xtra.values())
     pks = self.pks + list(xtra.keys())
     if len(pks)!=len(vals): raise NotFoundError(f"Need {len(pks)} pk")
@@ -118,10 +118,10 @@ def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
-           alter: bool=False, conversions: dict|None=None, **kwargs):
+           alter: bool=False, conversions: dict|None=None, xtra:dict|None=None, **kwargs):
     if not updates: updates={}
     updates = _process_row(updates)
-    xtra = getattr(self, 'xtra_id', {})
+    if not xtra: xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
@@ -143,9 +143,9 @@ def insert_all(
     conversions: Union[Dict[str, str], Default, None]=DEFAULT,
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: opt_bool=DEFAULT,
-    upsert:bool=False, analyze:bool=False,
+    upsert:bool=False, analyze:bool=False, xtra:dict|None=None,
     **kwargs) -> Table:
-    xtra = getattr(self,'xtra_id',{})
+    if not xtra: xtra = getattr(self,'xtra_id',{})
     records = [_process_row(o) for o in records]
     records = [{**o, **xtra} for o in records]
     return self._orig_insert_all(
