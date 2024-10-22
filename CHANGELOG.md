@@ -2,6 +2,17 @@
 
 <!-- do not remove -->
 
+## 0.0.12
+
+### Breaking Changes
+
+- Bump sqlite-minutils dependency to use sqlite transactions
+
+### New Features
+
+- add enum support ([#32](https://github.com/AnswerDotAI/fastlite/pull/32)), thanks to [@hamelsmu](https://github.com/hamelsmu)
+
+
 ## 0.0.11
 
 ### New Features
