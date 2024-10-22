@@ -4,6 +4,13 @@
 
 ## 0.0.12
 
+### New Features
+
+- Add `xtra` param to all methods that use `xtra` instance var ([#34](https://github.com/AnswerDotAI/fastlite/issues/34))
+
+
+## 0.0.12
+
 ### Breaking Changes
 
 - Bump sqlite-minutils dependency to use sqlite transactions
