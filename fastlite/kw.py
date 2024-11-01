@@ -114,7 +114,7 @@ def transform_sql(
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
 
-def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items()}
+def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items() if v is not UNSET}
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
