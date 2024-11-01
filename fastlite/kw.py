@@ -154,7 +154,6 @@ def insert_all(
         ignore=ignore, replace=replace, truncate=truncate, extracts=extracts, conversions=conversions,
         columns=columns, strict=strict, upsert=upsert, analyze=analyze)
 
-
 @patch
 def insert(
     self:Table,
@@ -175,11 +174,11 @@ def insert(
     if not record: record={}
     record = _process_row(record)
     record = {**record, **kwargs}
-    self._orig_insert(
+    row = first(self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
-        replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get_last()
+        replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict))
+    return self.cls(**row)
 
 
 @patch
@@ -227,7 +226,7 @@ def lookup(
     strict: bool|None = False,
     **kwargs):
     if not lookup_values: lookup_values={}
-    lookup_values = {**lookup_values, **kwargs}
+    lookup_values = {**lookup_values, **kwargs}    
     return self._orig_lookup(
         lookup_values=lookup_values, extra_values=extra_values, pk=pk, foreign_keys=foreign_keys,
         column_order=column_order, not_null=not_null, defaults=defaults, extracts=extracts,
