@@ -20,6 +20,11 @@ def xtra(self:Table, **kwargs):
 
 @patch
 def get_last(self:Table, as_cls:bool=True):
+    if hasattr(self, 'last_data') and self.last_data is not None:
+        row = self.last_data
+        self.last_data = None
+        if as_cls and hasattr(self,'cls'): row = self.cls(**row)
+        return row
     assert self.last_rowid is not None
     row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
     assert row, f"Couldn't find {self.last_rowid}"
