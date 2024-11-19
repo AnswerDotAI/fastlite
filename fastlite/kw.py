@@ -114,7 +114,9 @@ def transform_sql(
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
 
-def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items() if v is not UNSET}
+def _process_row(row):
+    if row is None: return {}
+    return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items() if v is not UNSET}
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
@@ -172,7 +174,8 @@ def insert(
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
-    if not record: record={}
+    if not kwargs and not record: return {}
+    if not kwargs and asdict(record) == {}: return {}
     record = _process_row(record)
     record = {**record, **kwargs}
     self._orig_insert(
