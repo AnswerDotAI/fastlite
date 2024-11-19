@@ -149,6 +149,8 @@ def insert_all(
     **kwargs) -> Table:
     if not xtra: xtra = getattr(self,'xtra_id',{})
     records = [_process_row(o) for o in records]
+    records = [x for x in records if x]
+    if not any(records): return []
     records = [{**o, **xtra} for o in records]
     return self._orig_insert_all(
         records=records, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
