@@ -114,7 +114,9 @@ def transform_sql(
             drop_foreign_keys=drop_foreign_keys, add_foreign_keys=add_foreign_keys, foreign_keys=foreign_keys,
             column_order=column_order, keep_table=keep_table)
 
-def _process_row(row): return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items() if v is not UNSET}
+def _process_row(row):
+    if row is None: return {}
+    return {k:(v.value if isinstance(v, Enum) else v) for k,v in asdict(row).items() if v is not UNSET}
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
@@ -147,6 +149,10 @@ def insert_all(
     **kwargs) -> Table:
     if not xtra: xtra = getattr(self,'xtra_id',{})
     records = [_process_row(o) for o in records]
+    records = [x for x in records if x]
+    if not any(records): 
+        self.result = []
+        return self
     records = [{**o, **xtra} for o in records]
     return self._orig_insert_all(
         records=records, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
@@ -172,9 +178,9 @@ def insert(
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
-    if not record: record={}
     record = _process_row(record)
     record = {**record, **kwargs}
+    if not record: return {}
     self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
