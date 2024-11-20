@@ -178,10 +178,9 @@ def insert(
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: opt_bool=DEFAULT,
     **kwargs) -> Table:
-    if not kwargs and not record: return {}
-    if not kwargs and asdict(record) == {}: return {}
     record = _process_row(record)
     record = {**record, **kwargs}
+    if not record: return {}
     self._orig_insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
