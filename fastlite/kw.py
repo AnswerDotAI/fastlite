@@ -4,6 +4,8 @@ from fastcore.utils import *
 from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
 from enum import Enum
 
+class MissingPrimaryKey(Exception): pass
+
 opt_bool = Union[bool, Default, None]
 
 def database(path, wal=True)->Any:
@@ -203,13 +205,14 @@ def upsert(
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: Union[bool, Default]|None=DEFAULT,
     **kwargs) -> Table:
+    record = _process_row(record)
+    record = {**record, **kwargs}
+    if not record: return {}    
     if pk==DEFAULT:
         assert len(self.pks)==1
         pk = self.pks[0]
-    if not record: record={}
-    record = _process_row(record)
-    record = {**record, **kwargs}
-    last_pk = record[pk]
+    try: last_pk = record[pk]
+    except KeyError as e: raise MissingPrimaryKey(e.args[0])
     self._orig_upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
