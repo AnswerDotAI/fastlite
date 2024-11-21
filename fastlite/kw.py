@@ -127,6 +127,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     updates = _process_row(updates)
     if not xtra: xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
+    if not updates: return {}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
     return self.get_last()
