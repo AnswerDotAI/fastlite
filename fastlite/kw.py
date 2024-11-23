@@ -21,14 +21,21 @@ def xtra(self:Table, **kwargs):
     self.xtra_id = kwargs
 
 @patch
-def get_last(self:Table, as_cls:bool=True):
-    assert self.last_rowid is not None
-    row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
-    assert row, f"Couldn't find {self.last_rowid}"
+def get_last(self:Table,
+    as_cls:bool=True, # Display as Row object
+    legacy:bool=True # If True, use last_rowid. If False, use Table.result attribute
+    ):
+    if legacy:
+        assert self.last_rowid is not None
+        row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
+        assert row, f"Couldn't find {self.last_rowid}"
+    else:
+        row = self.result[-1] if len(self.result) else {}
     vals = [row[pk] for pk in self.pks]
-    self.last_pk = vals[0] if len(vals)==1 else vals
+    self.last_pk = vals[0] if len(vals)==1 else vals        
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
-    return row
+    return row    
+
 
 @patch
 def ids_and_rows_where(
@@ -122,7 +129,7 @@ def _process_row(row):
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
-           alter: bool=False, conversions: dict|None=None, xtra:dict|None=None, **kwargs):
+           alter: bool=False, conversions: dict|None=None, xtra:dict|None=None, **kwargs) -> Any:
     if not updates: updates={}
     updates = _process_row(updates)
     if not xtra: xtra = getattr(self, 'xtra_id', {})
@@ -130,7 +137,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     if not updates: return {}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
-    return self.get_last()
+    return self.get_last(legacy=False)
 
 
 @patch
@@ -180,7 +187,7 @@ def insert(
     conversions: Union[Dict[str, str], Default, None]=DEFAULT,
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: opt_bool=DEFAULT,
-    **kwargs) -> Table:
+    **kwargs) -> Any:
     record = _process_row(record)
     record = {**record, **kwargs}
     if not record: return {}
@@ -188,7 +195,7 @@ def insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
         replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get_last()
+    return self.get_last(legacy=False)
 
 
 @patch
@@ -205,7 +212,7 @@ def upsert(
     conversions: Union[Dict[str, str], Default, None]=DEFAULT,
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: Union[bool, Default]|None=DEFAULT,
-    **kwargs) -> Table:
+    **kwargs) -> Any:
     record = _process_row(record)
     record = {**record, **kwargs}
     if not record: return {}    
@@ -218,7 +225,7 @@ def upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get(last_pk)
+    return self.get_last(legacy=False)
 
 
 @patch
