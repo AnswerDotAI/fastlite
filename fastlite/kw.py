@@ -31,9 +31,8 @@ def get_last(self:Table,
         assert row, f"Couldn't find {self.last_rowid}"
         vals = [row[pk] for pk in self.pks]
         self.last_pk = vals[0] if len(vals)==1 else vals
-        if as_cls and hasattr(self,'cls'): row = self.cls(**row)
-        return row
-    row = self.result[-1] if len(self.result) else {}
+    else:
+        row = self.result[-1] if len(self.result) else {}
     if hasattr(self,'cls'): row = self.cls(**row)
     return row    
 
