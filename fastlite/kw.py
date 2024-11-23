@@ -29,11 +29,11 @@ def get_last(self:Table,
         assert self.last_rowid is not None
         row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
         assert row, f"Couldn't find {self.last_rowid}"
-        vals = [row[pk] for pk in self.pks]
-        self.last_pk = vals[0] if len(vals)==1 else vals
     else:
         row = self.result[-1] if len(self.result) else {}
-    if hasattr(self,'cls'): row = self.cls(**row)
+    vals = [row[pk] for pk in self.pks]
+    self.last_pk = vals[0] if len(vals)==1 else vals        
+    if as_cls and hasattr(self,'cls'): row = self.cls(**row)
     return row    
 
 
