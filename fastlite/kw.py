@@ -21,14 +21,22 @@ def xtra(self:Table, **kwargs):
     self.xtra_id = kwargs
 
 @patch
-def get_last(self:Table, as_cls:bool=True):
-    assert self.last_rowid is not None
-    row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
-    assert row, f"Couldn't find {self.last_rowid}"
-    vals = [row[pk] for pk in self.pks]
-    self.last_pk = vals[0] if len(vals)==1 else vals
-    if as_cls and hasattr(self,'cls'): row = self.cls(**row)
-    return row
+def get_last(self:Table,
+    as_cls:bool=True, # Display as Row object
+    legacy:bool=True # If True, use last_rowid. If False, use Table.result attribute
+    ):
+    if legacy:
+        assert self.last_rowid is not None
+        row = first(self.rows_where('_rowid_=?', (self.last_rowid,)))
+        assert row, f"Couldn't find {self.last_rowid}"
+        vals = [row[pk] for pk in self.pks]
+        self.last_pk = vals[0] if len(vals)==1 else vals
+        if as_cls and hasattr(self,'cls'): row = self.cls(**row)
+        return row
+    row = self.result[-1] if len(self.result) else {}
+    if hasattr(self,'cls'): row = self.cls(**row)
+    return row    
+
 
 @patch
 def ids_and_rows_where(
@@ -130,9 +138,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     if not updates: return {}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
-    row = self.result[-1] if len(self.result) else {}
-    if hasattr(self,'cls'): row = self.cls(**row)
-    return row
+    return self.get_last(legacy=False)
 
 
 @patch
@@ -190,9 +196,7 @@ def insert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter, ignore=ignore,
         replace=replace, extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    row = self.result[-1] if len(self.result) else {}
-    if hasattr(self,'cls'): row = self.cls(**row)
-    return row
+    return self.get_last(legacy=False)
 
 
 @patch
@@ -222,9 +226,7 @@ def upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    row = self.result[-1] if len(self.result) else {}
-    if hasattr(self,'cls'): row = self.cls(**row)
-    return row
+    return self.get_last(legacy=False)
 
 
 @patch
