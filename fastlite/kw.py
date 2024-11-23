@@ -209,7 +209,7 @@ def upsert(
     conversions: Union[Dict[str, str], Default, None]=DEFAULT,
     columns: Union[Dict[str, Any], Default, None]=DEFAULT,
     strict: Union[bool, Default]|None=DEFAULT,
-    **kwargs) -> Table:
+    **kwargs) -> Any:
     record = _process_row(record)
     record = {**record, **kwargs}
     if not record: return {}    
@@ -222,7 +222,9 @@ def upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,
         extracts=extracts, conversions=conversions, columns=columns, strict=strict)
-    return self.get(last_pk)
+    row = self.result[-1] if len(self.result) else {}
+    if hasattr(self,'cls'): row = self.cls(**row)
+    return row
 
 
 @patch
