@@ -122,7 +122,7 @@ def _process_row(row):
 
 @patch
 def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|float|None=None,
-           alter: bool=False, conversions: dict|None=None, xtra:dict|None=None, **kwargs):
+           alter: bool=False, conversions: dict|None=None, xtra:dict|None=None, **kwargs) -> Any:
     if not updates: updates={}
     updates = _process_row(updates)
     if not xtra: xtra = getattr(self, 'xtra_id', {})
@@ -130,7 +130,9 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     if not updates: return {}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
-    return self.get_last()
+    row = self.result[-1] if len(self.result) else {}
+    if hasattr(self,'cls'): row = self.cls(**row)
+    return row
 
 
 @patch
