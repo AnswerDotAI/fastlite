@@ -14,8 +14,8 @@ from inspect import get_annotations
 from fastcore.utils import *
 from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
-from sqlite_minutils.db import *
-from sqlite_minutils.utils import rows_from_file,TypeTracker,Format
+from apswutils.db import *
+from apswutils.utils import rows_from_file,TypeTracker,Format
 import types
 
 try: from graphviz import Source

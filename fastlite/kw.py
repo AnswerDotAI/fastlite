@@ -1,7 +1,8 @@
 from dataclasses import MISSING
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
-from sqlite_minutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
+from apswutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
+from apsw import SQLError
 from enum import Enum
 
 class MissingPrimaryKey(Exception): pass
