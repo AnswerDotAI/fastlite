@@ -74,7 +74,7 @@ def __str__(self:View): return f'"{self.name}"'
 
 # %% ../nbs/00_core.ipynb 24
 @patch
-def q(self:Database, sql: str, params = None)->list:
+def q(self:Database, sql: str, params=None):
     return list(self.query(sql, params=params))
 
 # %% ../nbs/00_core.ipynb 27
