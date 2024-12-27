@@ -119,6 +119,7 @@ def __call__(
     with_pk:bool=False, # Return tuple of (pk,row)?
     as_cls:bool=True, # Convert returned dict to stored dataclass?
     xtra:dict|None=None, # Extra constraints
+    fetchone:bool=False, # Only fetch one result
     **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
     f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
@@ -130,19 +131,32 @@ def __call__(
     if as_cls and hasattr(self,'cls'):
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
         else: res = (self.cls(**o) for o in res)
-    return list(res)
+    return next(res) if fetchone else list(res)
 
-# %% ../nbs/00_core.ipynb 45
+# %% ../nbs/00_core.ipynb 41
+@patch
+def fetchone(
+    self:(Table|View),
+    where:str|None=None,  # SQL where fragment to use, for example `id > ?`
+    where_args: Iterable|dict|NoneType=None, # Parameters to use with `where`; iterable for `id>?`, or dict for `id>:id`
+    select:str = "*", # Comma-separated list of columns to select
+    as_cls:bool=True, # Convert returned dict to stored dataclass?
+    xtra:dict|None=None, # Extra constraints
+    **kwargs)->list:
+    "Shortcut for `__call__` that returns one item"
+    return self(where=where, where_args=where_args, select=select, as_cls=as_cls, xtra=xtra, fetchone=True)
+
+# %% ../nbs/00_core.ipynb 48
 class _ViewsGetter(_Getter):
     def __dir__(self): return self.db.view_names()
 
 @patch(as_prop=True)
 def v(self:Database): return _ViewsGetter(self)
 
-# %% ../nbs/00_core.ipynb 48
+# %% ../nbs/00_core.ipynb 51
 def _parse_typ(t): return t if not (_args:= get_args(t)) else first(_args, bool)  
 
-# %% ../nbs/00_core.ipynb 50
+# %% ../nbs/00_core.ipynb 53
 def _is_enum(o): return isinstance(o, type) and issubclass(o, Enum)
 def _enum_types(e): return {type(v.value) for v in e}
 
@@ -152,7 +166,7 @@ def get_typ(t):
     if _is_enum(t) and len(types:=_enum_types(t)) == 1: return first(types)
     return t
 
-# %% ../nbs/00_core.ipynb 58
+# %% ../nbs/00_core.ipynb 61
 @patch
 def create(
     self: Database,
@@ -184,7 +198,7 @@ def create(
     res.cls = cls
     return res
 
-# %% ../nbs/00_core.ipynb 68
+# %% ../nbs/00_core.ipynb 71
 @patch
 def import_file(self:Database, table_name, file, format=None, pk=None, alter=False):
     "Import path or handle `file` to new table `table_name`"
@@ -199,7 +213,7 @@ def import_file(self:Database, table_name, file, format=None, pk=None, alter=Fal
     if pk: tbl.transform(pk=pk)
     return tbl
 
-# %% ../nbs/00_core.ipynb 74
+# %% ../nbs/00_core.ipynb 77
 def _edge(tbl):
     return "\n".join(f"{fk.table}:{fk.column} -> {fk.other_table}:{fk.other_column};"
                      for fk in tbl.foreign_keys)
@@ -217,7 +231,7 @@ def _tnode(tbl):
   </table>"""
     return f"{tbl.name} [label=<{res}>];\n"
 
-# %% ../nbs/00_core.ipynb 75
+# %% ../nbs/00_core.ipynb 78
 def diagram(tbls, ratio=0.7, size="10", neato=False, render=True):
     layout = "\nlayout=neato;\noverlap=prism;\noverlap_scaling=0.5;""" if neato else ""
     edges  = "\n".join(map(_edge,  tbls))
