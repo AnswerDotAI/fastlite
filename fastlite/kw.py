@@ -33,9 +33,9 @@ def get_last(self:Table,
     else:
         row = self.result[-1] if len(self.result) else {}
     vals = [row[pk] for pk in self.pks]
-    self.last_pk = vals[0] if len(vals)==1 else vals        
+    self.last_pk = vals[0] if len(vals)==1 else vals
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
-    return row    
+    return row
 
 
 @patch
@@ -161,7 +161,7 @@ def insert_all(
     if not xtra: xtra = getattr(self,'xtra_id',{})
     records = [_process_row(o) for o in records]
     records = [x for x in records if x]
-    if not any(records): 
+    if not any(records):
         self.result = []
         return self
     records = [{**o, **xtra} for o in records]
@@ -216,7 +216,7 @@ def upsert(
     **kwargs) -> Any:
     record = _process_row(record)
     record = {**record, **kwargs}
-    if not record: return {}    
+    if not record: return {}
     if pk==DEFAULT:
         assert len(self.pks)==1
         pk = self.pks[0]
