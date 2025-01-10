@@ -55,8 +55,9 @@ def ids_and_rows_where(
     for row in self.rows_where(select=select, where=where, where_args=where_args, order_by=order_by, limit=limit, offset=offset):
         yield row.pop('__rid'), row
 
+_NO_DEFAULT = object()
 @patch
-def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True, xtra:dict|None=None)->Any:
+def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True, xtra:dict|None=None, default:Any=_NO_DEFAULT)->Any:
     if not isinstance(pk_values, (list, tuple)): pk_values = [pk_values]
     last_pk = pk_values[0] if len(self.pks) == 1 else pk_values
     if not xtra: xtra = getattr(self, 'xtra_id', {})
@@ -65,7 +66,7 @@ def get(self:Table, pk_values: list|tuple|str|int, as_cls:bool=True, xtra:dict|N
     if len(pks)!=len(vals): raise NotFoundError(f"Need {len(pks)} pk")
     wheres = ["[{}] = ?".format(pk_name) for pk_name in pks]
     item = first(self.ids_and_rows_where(" and ".join(wheres), vals))
-    if not item: raise NotFoundError
+    if not item: return default if default is not _NO_DEFAULT else raise NotFoundError
     rid,row = item
     self.last_pk,self.last_rowid = last_pk,rid
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
