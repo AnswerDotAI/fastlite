@@ -3,6 +3,10 @@ project:
   resources: 
     - "*.png"
     - "*.jpg"
+    - "*.txt"
+  preview:
+    navigate: false
+    port: 3000
 
 format:
   html:
