@@ -1,9 +1,13 @@
 # Fastlite and sqlite-utils
 
-> Fastlite builds on top of sqlite-utils; generally you will want to use both
+> Fastlite builds on top of apswutils and sqlite-utils; generally you will want to use a combination of these
 
 ## Docs
 
 - [Fastlite docs](https://answerdotai.github.io/fastlite/index.html.md): Fastlite docs home page
+- [apswutils docs](https://answerdotai.github.io/apswutils/): apswutils docs
 - [sqlite-utils docs](https://sqlite-utils.datasette.io/en/stable/_sources/python-api.rst.txt): Full sqlite-utils documentation
 
+## Optional
+
+- [APSW tour](https://rogerbinns.github.io/apsw/_sources/example.rst.txt)
