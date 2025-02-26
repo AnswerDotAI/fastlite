@@ -2,6 +2,15 @@
 
 <!-- do not remove -->
 
+## 0.1.2
+
+### New Features
+
+- Add optional default value for `get` ([#55](https://github.com/AnswerDotAI/fastlite/pull/55)), thanks to [@tom-pollak](https://github.com/tom-pollak)
+- Add table iter; Add `set_classes` and `get_tables` ([#51](https://github.com/AnswerDotAI/fastlite/issues/51))
+- Add `table.fetchone` ([#50](https://github.com/AnswerDotAI/fastlite/issues/50))
+
+
 ## 0.1.1
 
 ### Breaking Changes
@@ -12,7 +21,7 @@
 ### New Features
 
 - Use new `sqlite_minutils.Table.result` attribute ([#45](https://github.com/AnswerDotAI/fastlite/pull/45)), thanks to [@pydanny](https://github.com/pydanny)
-- Make get_last defensive ([#39](https://github.com/AnswerDotAI/fastlite/pull/39)), thanks to [@pydanny](https://github.com/pydanny)
+- Make `get_last` defensive ([#39](https://github.com/AnswerDotAI/fastlite/pull/39)), thanks to [@pydanny](https://github.com/pydanny)
 - Rewrite insert() function to take advantage of RETURNING data ([#37](https://github.com/AnswerDotAI/fastlite/pull/37)), thanks to [@pydanny](https://github.com/pydanny)
 
 ### Bugs Squashed
