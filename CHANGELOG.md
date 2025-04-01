@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.1.3
+
+### New Features
+
+- Add `link_dcs` and have `create_mod` output `__all__` ([#64](https://github.com/AnswerDotAI/fastlite/issues/64))
+
+
 ## 0.1.2
 
 ### New Features
