@@ -16,6 +16,7 @@ from fastcore.xml import highlight
 from fastcore.xtras import hl_md, dataclass_src
 from apswutils.db import *
 from apswutils.utils import rows_from_file,TypeTracker,Format
+from apswutils.db import NotFoundError
 import types
 
 try: from graphviz import Source
@@ -102,9 +103,18 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
     "Create module for dataclasses for `db`"
     mod_fn = str(mod_fn)
     if not mod_fn.endswith('.py'): mod_fn+='.py'
+    dcs = all_dcs(db, with_views, store=store, suf=suf)
+    strlist = ', '.join([f'"{o.__name__}"' for o in dcs])
     with open(mod_fn, 'w') as f:
+        print(f'__all__ = [{strlist}]', file=f)
         print('from dataclasses import dataclass', file=f)
-        for o in all_dcs(db, with_views, store=store, suf=suf): print(dataclass_src(o), file=f)
+        for o in dcs: print(dataclass_src(o), file=f)
+
+# %% ../nbs/00_core.ipynb
+@patch
+def link_dcs(self:Database, mod):
+    "Set the internal dataclass type links for tables using `mod` (created via `create_mod`)"
+    for o in mod.__all__: self.t[o.lower()].cls = getattr(mod, o)
 
 # %% ../nbs/00_core.ipynb
 @patch
@@ -131,7 +141,8 @@ def __call__(
     if as_cls and hasattr(self,'cls'):
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
         else: res = (self.cls(**o) for o in res)
-    return next(res) if fetchone else list(res)
+    try: return next(res) if fetchone else list(res)
+    except StopIteration: raise NotFoundError from None
 
 # %% ../nbs/00_core.ipynb
 @patch
