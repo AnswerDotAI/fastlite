@@ -4,7 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name="fastlite"
-dynamic = ["description", "version","dependencies", "optional-dependencies", "readme", "requires-python", "license", "authors", "keywords", "classifiers", "entry-points", "urls"]
+requires-python=">=3.10"
+dynamic = [ "keywords", "description", "version", "dependencies", "optional-dependencies", "readme", "license", "authors", "classifiers", "entry-points", "scripts", "urls"]
 
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }, { file = "settings.ini" }, { file = "setup.py" }]
