@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name="fastlite"
-requires-python=">=3.10"
 dynamic = ["description", "version","dependencies", "optional-dependencies", "readme", "requires-python", "license", "authors", "keywords", "classifiers", "entry-points", "urls"]
 
 [tool.uv]
