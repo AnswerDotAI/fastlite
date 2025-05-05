@@ -11,7 +11,7 @@ opt_bool = Union[bool, Default, None]
 
 def database(path, wal=True)->Any:
     path = Path(path)
-    path.parent.mkdir(exist_ok=True)
+    path.parent.mkdir(parents=True, exist_ok=True)
     db = Database(path)
     if wal: db.enable_wal()
     return db
