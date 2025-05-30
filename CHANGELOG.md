@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.1.4
+
+
+### Bugs Squashed
+
+- upsert method doesn't support composite primary keys ([#69](https://github.com/AnswerDotAI/fastlite/issues/69))
+
+
 ## 0.1.3
 
 ### New Features
