@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.1.5
+
+### New Features
+
+- Check for multi row return in `selectone` ([#70](https://github.com/AnswerDotAI/fastlite/issues/70))
+
+
+
 ## 0.1.4
 
 
