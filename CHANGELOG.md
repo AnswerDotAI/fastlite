@@ -2,12 +2,15 @@
 
 <!-- do not remove -->
 
-## 0.1.5
+## 0.2.0
+
+### Breaking Changes
+
+- `fetchone` renamed to `selectone`, and now raises exception for non-unique return
 
 ### New Features
 
 - Check for multi row return in `selectone` ([#70](https://github.com/AnswerDotAI/fastlite/issues/70))
-
 
 
 ## 0.1.4
