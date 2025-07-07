@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.1
+
+### New Features
+
+- Auto handle UNSET values in update kwargs ([#71](https://github.com/AnswerDotAI/fastlite/issues/71))
+
+
 ## 0.2.0
 
 ### Breaking Changes
