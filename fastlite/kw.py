@@ -2,17 +2,18 @@ from dataclasses import MISSING
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
 from apswutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
-from apsw import SQLError
+from apsw import SQLError, Connection
 from enum import Enum
 
 class MissingPrimaryKey(Exception): pass
 
 opt_bool = Union[bool, Default, None]
 
-def database(path, wal=True)->Any:
+def database(path, wal=True, flags=None)->Any:
     path = Path(path)
     path.parent.mkdir(exist_ok=True)
-    db = Database(path)
+    conn_or_path = Connection(str(path), flags=flags) if flags else path
+    db = Database(conn_or_path)
     if wal: db.enable_wal()
     return db
 
