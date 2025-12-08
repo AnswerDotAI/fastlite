@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.2.2
+
+### New Features
+
+- Add `__all__` to fastlite.kw ([#74](https://github.com/AnswerDotAI/fastlite/issues/74))
+- Allow `flags` to modify SQLite connection ([#73](https://github.com/AnswerDotAI/fastlite/pull/73)), thanks to [@gautam-e](https://github.com/gautam-e)
+
+
 ## 0.2.1
 
 ### New Features
