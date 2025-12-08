@@ -5,7 +5,7 @@ from apswutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryabl
 from apsw import SQLError, Connection
 from enum import Enum
 
-__all__ = ['MissingPrimaryKey', 'opt_bool', 'database']
+__all__ = ['MissingPrimaryKey', 'opt_bool', 'database', 'SQLError', 'Connection', 'Database', 'Table', 'DEFAULT', 'Default', 'Queryable', 'NotFoundError', 'MISSING']
 
 class MissingPrimaryKey(Exception): pass
 
