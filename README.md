@@ -386,9 +386,7 @@ possible, they support Python dictionaries, dataclasses, and classes.
 
 ### .insert()
 
-Creates a record. In the name of flexibility, we test that dictionaries,
-dataclasses, and classes all work. Returns an instance of the updated
-record.
+Creates a record. Returns an instance of the updated record.
 
 Insert using a dictionary.
 
@@ -415,8 +413,8 @@ cat = cats.insert(Cat(name='Jerry', weight=5.2))
 
 ### .update()
 
-Updates a record using a Python dict, dataclasses, and classes all work
-and returns an instance of the updated record.
+Updates a record using a Python dict, dataclass, or object, and returns
+an instance of the updated record.
 
 Updating from a Python dict:
 
@@ -453,7 +451,95 @@ cats.delete(cat.id)
 
     <Table cat (id, name, weight)>
 
+### Multi-field primary keys
+
+Pass a collection of strings to create a multi-field pk:
+
+``` python
+class PetFood: catid:int; food:str; qty:int
+petfoods = db.create(PetFood, pk=['catid','food'])
+print(petfoods.schema)
+```
+
+    CREATE TABLE [pet_food] (
+       [catid] INTEGER,
+       [food] TEXT,
+       [qty] INTEGER,
+       PRIMARY KEY ([catid], [food])
+    )
+
+You can index into these using multiple values:
+
+``` python
+pf = petfoods.insert(PetFood(1, 'tuna', 2))
+petfoods[1,'tuna']
+```
+
+    PetFood(catid=1, food='tuna', qty=2)
+
+Updates work in the usual way:
+
+``` python
+pf.qty=3
+petfoods.update(pf)
+```
+
+    PetFood(catid=1, food='tuna', qty=3)
+
+You can also use `upsert` to update if the key exists, or insert
+otherwise:
+
+``` python
+pf.qty=1
+petfoods.upsert(pf)
+petfoods()
+```
+
+    [PetFood(catid=1, food='tuna', qty=1)]
+
+``` python
+pf.food='salmon'
+petfoods.upsert(pf)
+petfoods()
+```
+
+    [PetFood(catid=1, food='tuna', qty=1), PetFood(catid=1, food='salmon', qty=1)]
+
+`delete` takes a tuple of keys:
+
+``` python
+petfoods.delete((1, 'tuna'))
+petfoods()
+```
+
+    [PetFood(catid=1, food='salmon', qty=1)]
+
+## Diagrams
+
+If you have [graphviz](https://pypi.org/project/graphviz/) installed,
+you can create database diagrams. Pass a subset of tables to just
+diagram those. You can also adjust the size and aspect ratio.
+
+``` python
+diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
+```
+
+![](index_files/figure-commonmark/cell-50-output-1.svg)
+
 ### Importing CSV/TSV/etc
+
+------------------------------------------------------------------------
+
+<a
+href="https://github.com/AnswerDotAI/fastlite/blob/main/fastlite/core.py#LNone"
+target="_blank" style="float:right; font-size:smaller">source</a>
+
+### Database.import_file
+
+>  Database.import_file (table_name, file, format=None, pk=None,
+>                            alter=False)
+
+*Import path or handle `file` to new table `table_name`*
 
 You can pass a file name, string, bytes, or open file handle to
 `import_file` to import a CSV:
@@ -472,23 +558,3 @@ table()
     [{'id': 1, 'name': 'Alice', 'age': 30},
      {'id': 2, 'name': 'Bob', 'age': 25},
      {'id': 3, 'name': 'Charlie', 'age': 35}]
-
-## Diagrams
-
-If you have [graphviz](https://pypi.org/project/graphviz/) installed,
-you can create database diagrams:
-
-``` python
-diagram(db.tables)
-```
-
-![](index_files/figure-commonmark/cell-45-output-1.svg)
-
-Pass a subset of tables to just diagram those. You can also adjust the
-size and aspect ratio.
-
-``` python
-diagram(db.t['Artist','Album','Track','Genre','MediaType'], size=8, ratio=0.4)
-```
-
-![](index_files/figure-commonmark/cell-46-output-1.svg)

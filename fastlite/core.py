@@ -129,7 +129,6 @@ def __call__(
     with_pk:bool=False, # Return tuple of (pk,row)?
     as_cls:bool=True, # Convert returned dict to stored dataclass?
     xtra:dict|None=None, # Extra constraints
-    fetchone:bool=False, # Only fetch one result
     **kwargs)->list:
     "Shortcut for `rows_where` or `pks_and_rows_where`, depending on `with_pk`"
     f = getattr(self, 'pks_and_rows_where' if with_pk else 'rows_where')
@@ -141,12 +140,11 @@ def __call__(
     if as_cls and hasattr(self,'cls'):
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
         else: res = (self.cls(**o) for o in res)
-    try: return next(res) if fetchone else list(res)
-    except StopIteration: raise NotFoundError from None
+    return list(res)
 
 # %% ../nbs/00_core.ipynb
 @patch
-def fetchone(
+def selectone(
     self:(Table|View),
     where:str|None=None,  # SQL where fragment to use, for example `id > ?`
     where_args: Iterable|dict|NoneType=None, # Parameters to use with `where`; iterable for `id>?`, or dict for `id>:id`
@@ -154,8 +152,11 @@ def fetchone(
     as_cls:bool=True, # Convert returned dict to stored dataclass?
     xtra:dict|None=None, # Extra constraints
     **kwargs)->list:
-    "Shortcut for `__call__` that returns one item"
-    return self(where=where, where_args=where_args, select=select, as_cls=as_cls, xtra=xtra, fetchone=True)
+    "Shortcut for `__call__` that returns exactly one item"
+    res = self(where=where, where_args=where_args, select=select, as_cls=as_cls, xtra=xtra, limit=2)
+    if len(res)==0: raise NotFoundError
+    elif len(res) > 1: raise ValueError(f"Not unique: {len(res)} results")
+    return res[0]
 
 # %% ../nbs/00_core.ipynb
 @patch

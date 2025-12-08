@@ -2,17 +2,20 @@ from dataclasses import MISSING
 from typing import Any,Union,Tuple,List,Iterable
 from fastcore.utils import *
 from apswutils.db import Database,Table,DEFAULT,ForeignKeysType,Default,Queryable,NotFoundError
-from apsw import SQLError
+from apsw import SQLError, Connection
 from enum import Enum
+
+__all__ = ['MissingPrimaryKey', 'opt_bool', 'database']
 
 class MissingPrimaryKey(Exception): pass
 
 opt_bool = Union[bool, Default, None]
 
-def database(path, wal=True)->Any:
+def database(path, wal=True, flags=None)->Any:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    db = Database(path)
+    conn_or_path = Connection(str(path), flags=flags) if flags else path
+    db = Database(conn_or_path)
     if wal: db.enable_wal()
     return db
 
@@ -137,6 +140,7 @@ def update(self:Table, updates: dict|None=None, pk_values: list|tuple|str|int|fl
     updates = _process_row(updates)
     if not xtra: xtra = getattr(self, 'xtra_id', {})
     updates = {**updates, **kwargs, **xtra}
+    updates = _process_row(updates)
     if not updates: return {}
     if pk_values is None: pk_values = [updates[o] for o in self.pks]
     self._orig_update(pk_values, updates=updates, alter=alter, conversions=conversions)
@@ -219,11 +223,7 @@ def upsert(
     record = _process_row(record)
     record = {**record, **kwargs}
     if not record: return {}
-    if pk==DEFAULT:
-        assert len(self.pks)==1
-        pk = self.pks[0]
-    try: last_pk = record[pk]
-    except KeyError as e: raise MissingPrimaryKey(e.args[0])
+    if pk==DEFAULT: pk=self.pks
     self._orig_upsert(
         record=record, pk=pk, foreign_keys=foreign_keys, column_order=column_order, not_null=not_null,
         defaults=defaults, hash_id=hash_id, hash_id_columns=hash_id_columns, alter=alter,

@@ -2,6 +2,32 @@
 
 <!-- do not remove -->
 
+## 0.2.1
+
+### New Features
+
+- Auto handle UNSET values in update kwargs ([#71](https://github.com/AnswerDotAI/fastlite/issues/71))
+
+
+## 0.2.0
+
+### Breaking Changes
+
+- `fetchone` renamed to `selectone`, and now raises exception for non-unique return
+
+### New Features
+
+- Check for multi row return in `selectone` ([#70](https://github.com/AnswerDotAI/fastlite/issues/70))
+
+
+## 0.1.4
+
+
+### Bugs Squashed
+
+- upsert method doesn't support composite primary keys ([#69](https://github.com/AnswerDotAI/fastlite/issues/69))
+
+
 ## 0.1.3
 
 ### New Features
