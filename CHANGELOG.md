@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.3
+
+### Bugs Squashed
+
+- Use UNSET for default values ([#75](https://github.com/AnswerDotAI/fastlite/issues/75))
+
+
 ## 0.2.2
 
 ### New Features
