@@ -81,7 +81,7 @@ def q(self:Database, sql: str, params=None):
 
 # %% ../nbs/00_core.ipynb
 def _get_flds(tbl): 
-    return [(k, v|None, field(default=tbl.default_values.get(k,None)))
+    return [(k, v|None, field(default=tbl.default_values.get(k,UNSET)))
             for k,v in tbl.columns_dict.items()]
 
 def _dataclass(self:Table, store=True, suf='')->type:
@@ -108,6 +108,7 @@ def create_mod(db, mod_fn, with_views=False, store=True, suf=''):
     with open(mod_fn, 'w') as f:
         print(f'__all__ = [{strlist}]', file=f)
         print('from dataclasses import dataclass', file=f)
+        print('from fastlite.kw import UNSET', file=f)
         for o in dcs: print(dataclass_src(o), file=f)
 
 # %% ../nbs/00_core.ipynb
