@@ -81,7 +81,7 @@ def q(self:Database, sql: str, params=None):
 
 # %% ../nbs/00_core.ipynb
 def _get_flds(tbl): 
-    return [(k, v|None, field(default=tbl.default_values.get(k,UNSET)))
+    return [(k, v|None, field(default=UNSET))
             for k,v in tbl.columns_dict.items()]
 
 def _dataclass(self:Table, store=True, suf='')->type:
