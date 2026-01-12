@@ -35,6 +35,10 @@ def get_last(self:Table,
         assert row, f"Couldn't find {self.last_rowid}"
     else:
         row = self.result[-1] if len(self.result) else {}
+    if not row:
+        self.last_pk = None
+        self.last_rowid = None
+        return {}
     vals = [row[pk] for pk in self.pks]
     self.last_pk = vals[0] if len(vals)==1 else vals
     if as_cls and hasattr(self,'cls'): row = self.cls(**row)
@@ -252,4 +256,3 @@ def lookup(
         lookup_values=lookup_values, extra_values=extra_values, pk=pk, foreign_keys=foreign_keys,
         column_order=column_order, not_null=not_null, defaults=defaults, extracts=extracts,
         conversions=conversions, columns=columns, strict=strict)
-
