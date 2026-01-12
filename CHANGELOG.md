@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.2.4
+
+### Bugs Squashed
+
+- Fix KeyError in insert when ignore=True and duplicate key exists ([#78](https://github.com/AnswerDotAI/fastlite/pull/78)), thanks to [@dienhoa](https://github.com/dienhoa)
+
+
 ## 0.2.3
 
 ### Bugs Squashed
