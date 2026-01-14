@@ -71,7 +71,7 @@ dt['Artist','Album','Track','Genre','MediaType']
 It also provides auto-complete in Jupyter, IPython, and nearly any other
 interactive Python environment:
 
-<img src="index_files/figure-commonmark/cell-16-1-image.png"
+<img src="index_files/figure-commonmark/8905c5f8-1-image.png"
 width="180" />
 
 You can check if a table is in the database already:
@@ -93,7 +93,7 @@ ac
 
 Auto-complete works for columns too:
 
-<img src="index_files/figure-commonmark/cell-21-1-image.png"
+<img src="index_files/figure-commonmark/50e8220b-1-image.png"
 width="140" />
 
 Columns, tables, and view stringify in a format suitable for including
@@ -536,8 +536,13 @@ target="_blank" style="float:right; font-size:smaller">source</a>
 
 ### Database.import_file
 
->  Database.import_file (table_name, file, format=None, pk=None,
->                            alter=False)
+``` python
+
+def import_file(
+    table_name, file, format:NoneType=None, pk:NoneType=None, alter:bool=False
+):
+
+```
 
 *Import path or handle `file` to new table `table_name`*
 

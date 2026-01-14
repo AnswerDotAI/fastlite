@@ -120,7 +120,7 @@ def link_dcs(self:Database, mod):
 # %% ../nbs/00_core.ipynb
 @patch
 def __call__(
-    self:(Table|View),
+    self:Table,
     where:str|None=None,  # SQL where fragment to use, for example `id > ?`
     where_args: Iterable|dict|NoneType=None, # Parameters to use with `where`; iterable for `id>?`, or dict for `id>:id`
     order_by: str|None=None, # Column or fragment of SQL to order by
@@ -142,6 +142,7 @@ def __call__(
         if with_pk: res = ((k,self.cls(**v)) for k,v in res)
         else: res = (self.cls(**o) for o in res)
     return list(res)
+View.__call__ = Table.__call__
 
 # %% ../nbs/00_core.ipynb
 @patch
