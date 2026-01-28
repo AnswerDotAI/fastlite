@@ -1,11 +1,34 @@
 [build-system]
-requires = ["setuptools>=64.0"]
+requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name="fastlite"
+dynamic = ["version"]
+description = "A bit of extra usability for sqlite"
+readme = "README.md"
 requires-python=">=3.10"
-dynamic = [ "keywords", "description", "version", "dependencies", "optional-dependencies", "readme", "license", "authors", "classifiers", "entry-points", "scripts", "urls"]
+license = {text = "Apache-2.0"}
+authors = [{name = "Jeremy Howard", email = "info@fast.ai"}]
+keywords = ['nbdev', 'jupyter', 'notebook', 'python', 'sqlite', 'sql']
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = []
 
-[tool.uv]
-cache-keys = [{ file = "pyproject.toml" }, { file = "settings.ini" }, { file = "setup.py" }]
+[project.urls]
+Repository = "https://github.com/AnswerDotAI/fastlite"
+Documentation = "https://AnswerDotAI.github.io/fastlite"
+
+[project.entry-points.nbdev]
+fastlite = "fastlite._modidx:d"
+
+[tool.setuptools.dynamic]
+version = {attr = "fastlite.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["fastlite"]
+
+[tool.nbdev]
+custom_sidebar = false
