@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://AnswerDotAI.github.io/fastlite/core.html</loc>
+    <lastmod>2026-02-04T04:32:10.238Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AnswerDotAI.github.io/fastlite/index.html</loc>
+    <lastmod>2026-02-04T04:32:10.161Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AnswerDotAI.github.io/fastlite/test_upsert.html</loc>
+    <lastmod>2026-02-04T04:32:10.172Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AnswerDotAI.github.io/fastlite/test_insert.html</loc>
+    <lastmod>2026-02-04T04:32:10.139Z</lastmod>
+  </url>
+  <url>
+    <loc>https://AnswerDotAI.github.io/fastlite/test_update.html</loc>
+    <lastmod>2026-02-04T04:32:10.146Z</lastmod>
+  </url>
+</urlset>
