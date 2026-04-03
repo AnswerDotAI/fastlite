@@ -31,4 +31,5 @@ version = {attr = "fastlite.__version__"}
 include = ["fastlite"]
 
 [tool.nbdev]
+allowed_cell_metadata_keys = ["solveit_ai"]
 custom_sidebar = false
